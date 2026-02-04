@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="record-wrapper">
+    <div class="record-inner">
+<h1 class="record-title">記録</h1>
+
+<div class="recor-date">
+    <input type="date" value="{{ today|date:'Y-m-d' }}">
+</div>
+
+<div class="record-card">
+    <span class="subject-label">{{ goal.subject }}</span>
+    <ul class="record-list">
+        <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
+        {% if goal.page_start %}
+        <li>{{ goal.page_start }}ページ～{{ goal.page_end }}ページ</li>
+        {% endif %}
+    </ul>
+</div>
+</div>
+
+<div class="record-actions">
+<form method="post" class="record-form">
+    {% csrf_token %}
+    <button type="submit" name="action" value="achieved" class="btn-achieved">達成！</button>
+</form>
+<form action="{% url 'accounts:not_achieved' %}" method="get">
+    <button type="submit" class="btn-not">達成ならず…</button>
+</form>
+<a href="{% url 'accounts:home' %}">← ホームに戻る</a>
+</div>
+{% endblock %}

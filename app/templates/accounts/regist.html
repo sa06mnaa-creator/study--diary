@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-form-wrapper">
+<form method="POST" class="auth-form">
+{% csrf_token %}
+<p>
+    {{ regist_form.username.label_tag }}<br>
+    {{ regist_form.username }}
+    {{ regist_form.username.errors }}
+</p>
+<p>
+    {{ regist_form.birthday.label_tag}}<br>
+    {{ regist_form.birthday }}
+    {{ regist_form.birthday.errors }}
+</P>
+<p>
+    {{ regist_form.email.label_tag}}<br>
+    {{ regist_form.email }}
+    {{ regist_form.email.errors }}
+<p>
+{{ regist_form.password.label_tag }}<br>
+{{ regist_form.password }}
+{{ regist_form.password.errors }}
+</p>
+<p>
+    {{ regist_form.confirm_password.label_tag }}
+    {{ regist_form.confirm_password }}
+    {{ regist_form.confirm_password.errors }}
+</p>
+<input type="submit" value="登録">
+</form>    
+</div>
+{% endblock %}

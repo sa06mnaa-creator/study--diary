@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="not-achieved-wrapper">
+<h2>惜しい！</h2>
+<p>明日も頑張りましょう</p>
+
+<div class="action-buttons">
+    <a href="{% url 'accounts:calendar' year=year month=month %}" class="btn-calendar">
+        カレンダーへ
+    </a>
+    <a href="{% url 'accounts:home' %}" class="btn-gray">
+        ホームに戻る
+    </a>
+</div>
+</div>
+{% endblock %}

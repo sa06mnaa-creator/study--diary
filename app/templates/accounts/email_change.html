@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-title">メールアドレス変更</h2>
+<form method="post" action="{% url 'accounts:email_change' %}" class="email-change-form">
+    {% csrf_token %}
+
+<div class="email-change-box">
+    <div class="form-item">
+        <label>現在のメールアドレス</label>
+        <input type="email" value="{{ request.user.email }}" disabled>
+    </div>
+    <div class="form-item">
+        <label>新しく登録する<br>メールアドレスを入力してください</label>
+        <input type="email" name="email">
+    </div>
+
+    <button type="submit" class="btn-submit">変更</button>
+</div>
+</form>
+{% endblock %}

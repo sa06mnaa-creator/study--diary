@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block  content %}
+<h1>プロフィール編集</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="profile-box">
+        <div class="icon-preview">
+            <a href="{% url 'accounts:icon_change' %}" class="icon-tap">
+            {% if profile.icon %}
+                <img src="{{ profile.icon.url }}" class="profile-icon">
+            {% else %}
+                <img src="{% static 'img/user.png' %}" class="profile-icon">
+            {% endif %}
+            <span class="icon-hint">タップしてアイコン変更  </span>
+            </a>
+        </div>
+
+        
+    
+    <div class="form-item">
+    <label>名前</label>
+    {{ form.name }}
+    </div>
+    <div class="form-item">
+    <label>生年月日</label>
+    <input type="date" name="birthday" value="{{ profile.birthday|date:'Y-m-d' }}">
+    </div>
+    <div class="form-item">
+    <label>【達成目標】(２０文字以内)</label>
+    <textarea name="goal">{{ profile.goal }}</textarea>
+    </div>
+    
+    <button type="submit" class="btn-submit">登録</button>
+</form>
+{% endblock %}

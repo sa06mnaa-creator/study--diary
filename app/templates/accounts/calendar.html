@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+
+{% block content %}
+
+<div class="calendar-container">
+
+  <div class="calendar-header">
+    <a href="{% url 'accounts:calendar' prev_year prev_month %}" class="month-nav">&lt;</a>
+    <span class="calendar-title">{{ year }}年{{ month }}月</span>
+    <a href="{% url 'accounts:calendar' next_year next_month %}" class="month-nav">&gt;</a>
+  </div>
+  <table border="1">
+   <tr>
+    <th>日</th><th>月</th><th>火</th><th>水</th>
+    <th>木</th><th>金</th><th>土</th>
+   </tr>
+{% for week in month_days %}
+<tr>
+    {% for day in week %}
+    <td valign="top" style="width:45px; height:60px;">
+        {{ day.day }}
+
+        {% if day in stamp_dict %}
+            {% with records=stamp_dict|dict_get:day %}
+                {% with record=records.0 %}
+                <div class="stamp {{ record.stamp_color }}"
+                     data-bs-toggle="modal"
+                     data-bs-target="#modal-{{ day|date:'Ymd' }}"
+                     style="cursor:pointer;">
+                    {% if record.stamp_shape == "circle" %}●{% endif %}
+                    {% if record.stamp_shape == "smile" %}☻{% endif %}
+                    {% if record.stamp_shape == "heart" %}♡{% endif %}
+                    {% if record.stamp_shape == "sun" %}☀{% endif %}
+                    {% if record.stamp_shape == "moon" %}☽{% endif %}
+                    {% if record.stamp_shape == "cloud" %}☁{% endif %}
+                </div>
+                {% endwith %}
+
+                {% if records|length > 1 %}
+                    <small>+{{ records|length|add:"-1" }}</small>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    </td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+</div>
+{% for day in stamp_dict %}
+{% with records=stamp_dict|dict_get:day %}
+<div class="modal fade" id="modal-{{ day|date:'Ymd' }}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ day|date:"Y年n月j日" }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        {% for record in records %}
+        <div class="mb-2">
+          <span class="calendar-stamp {{ record.stamp_color }}">
+            {% if record.stamp_shape == "circle" %}●{% endif %}
+            {% if record.stamp_shape == "smile" %}☻{% endif %}
+            {% if record.stamp_shape == "heart" %}♡{% endif %}
+            {% if record.stamp_shape == "sun" %}☀{% endif %}
+            {% if record.stamp_shape == "moon" %}☽{% endif %}
+            {% if record.stamp_shape == "cloud" %}☁{% endif %}
+          </span>
+          {{ record.subject }}
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endwith %}
+{% endfor %}
+
+<a href="{% url 'accounts:home' %}" class="btn-gray">ホームに戻る</a>
+{% endblock %}

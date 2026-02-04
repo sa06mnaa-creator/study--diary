@@ -1,0 +1,28 @@
+<h2>目標を設定する</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <p> 
+        日付<br>
+        {{ form.date }}
+    </p>
+
+    <p>
+        教科名<br>
+        {{ form.subject }}
+    </p>
+
+    <p>
+        勉強時間<br>
+        {{ form.study_hour }} 時間
+        {{ form.study_minute }} 分
+    </p>
+
+    <p>
+        ページ数<br>
+        {{ form.page_start }}ページ～{{ form.page_end }}ページ
+    </p>
+
+    <button type="submit">保存</button>
+</form>

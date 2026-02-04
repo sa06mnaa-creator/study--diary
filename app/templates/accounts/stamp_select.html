@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="stamp-wrapper">
+  <div class="stamp-inner">
+    <div class="stamp-date">{{ today|default:"" }}</div>
+
+    <h2 class="stamp-congrats">おめでとう！</h2>
+    <p class="stamp-sub">明日も頑張りましょう</p>
+
+    <h3 class="stamp-title">スタンプを選ぼう</h3>
+
+    <form method="post" action="{% url 'accounts:stamp_select' goal.id %}" class="stamp-form">
+      {% csrf_token %}
+
+      <div class="stamp-box">
+        <div class="stamp-box-title">形</div>
+        <div class="choice-grid">
+          <label class="choice">
+            <input type="radio" name="shape" value="circle" required>
+            <span class="choice-ui">○</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="shape" value="smile">
+            <span class="choice-ui">☻</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="shape" value="heart">
+            <span class="choice-ui">♡</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="shape" value="sun">
+            <span class="choice-ui">☀</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="shape" value="moon">
+            <span class="choice-ui">☽</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="shape" value="cloud">
+            <span class="choice-ui">☁</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="stamp-box">
+        <div class="stamp-box-title">色</div>
+        <div class="color-grid">
+          <label class="color-choice">
+            <input type="radio" name="color" value="red" required>
+            <span class="color-dot red"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="pink">
+            <span class="color-dot pink"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="orange">
+            <span class="color-dot orange"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="yellow">
+            <span class="color-dot yellow"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="green">
+            <span class="color-dot green"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="lightblue">
+            <span class="color-dot lightblue"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="blue">
+            <span class="color-dot blue"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="purple">
+            <span class="color-dot purple"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="black">
+            <span class="color-dot black"></span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="stamp-submit">スタンプを押す</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

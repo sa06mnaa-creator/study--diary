@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if not user.is_authenticated %}
+   
+    <p>ログインしていません</p>
+{% endif %}
+<div class="home-container">
+<div class="goal-box">
+    <h3>【達成目標】</h3>
+    <p>{{ profile.goal|linebreaksbr }}</p>
+</div>
+<div class="date-box">
+    {% now "Y年n月j日 (D)" %}
+        </div>
+<h3>今日の目標</h3>
+
+    {% if goals %}
+    <div class="goal-grid">
+    {% for goal in goals %}
+    <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
+        <div class="goal-subject">{{ goal.subject }}</div>
+        <ul class="goal-detail">  
+         <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
+         {% if goal.page_start %}<li>ページ{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
+         {% endif %}
+        </ul>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p>まだ目標がありません</p>
+{% endif %}
+<a href="{% url 'accounts:goal_create' %}" class="add-button">＋追加</a>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+<nav class="mt-3">
+    <a href="{% url 'accounts:home' %}">ホーム</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'accounts:password_reset' %}">パスワード変更</a>
+    {% else %}
+        <a href="{% url 'accounts:login' %}">ログイン</a>
+        <a href="{% url 'accounts:regist' %}">新規登録</a>
+    {% endif %}
+</nav>
+
+    

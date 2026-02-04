@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block  content %}
+
+<div class="login-wrapper">
+    <h2 class="page-title">Study diary</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-item">
+            <label>メールアドレス</label>
+            <input type="email" name="email">
+        </div>
+        <div class="form-item">
+            <label>パスワード</label>
+            <input type="password" name="password">
+        </div>
+
+    <button type="submit" class="btn-submit">ログイン</button>
+<div class="auth-links">
+    <a href="{% url 'accounts:regist' %}">アカウント登録</a>
+    <br>
+    <span>パスワードをお忘れの方は
+    <a href="{% url 'accounts:password_reset' %}">こちら</a>
+    </span>
+</div>
+</form>
+</div>
+
+{% endblock %}
+
+
+

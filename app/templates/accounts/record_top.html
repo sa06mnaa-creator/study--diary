@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="record-top-wrapper">
+    <div class="record-top-inner">
+<h2>どの教科を記録する？</h2>
+
+    <div class="goal-grid">
+    {% for goal in goals %}
+    <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
+        {{ goal.subject }}
+    </a>
+    {% empty %}
+    <p class="one-line">まだ目標がありません</p>
+    {% endfor %}
+     </div>
+    </div>
+</div>
+
+{% endblock %}
