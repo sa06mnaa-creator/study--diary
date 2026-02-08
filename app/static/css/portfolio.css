@@ -1,0 +1,113 @@
+.pink-header{
+  background: #f6cfd0;
+  padding: 26px 16px 22px;
+  text-align: center;
+  border-bottom: 4px solid #f6cfd0;
+}
+.pink-title{
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  color: black;
+  letter-spacing: .05em;
+}
+.app-shot{
+  margin: 40px auto;
+  padding: 24px;
+  border: 1px solid #ccc;
+  background: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-width: 900px;
+}
+.app-shot img{
+  display: block;
+  max-width: 360px;
+  
+  border: 1px solid #bbb;
+  background: #fff;
+}
+.app-desc{
+  margin: 20px auto;
+  max-width: 900px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+}
+.docs{
+  margin: 40px 0;
+  text-align: center;
+}
+.docs a{
+  margin: 0 16px;
+  color: #2f6fff;
+  font-size: 18px;
+  text-decoration: underline;
+}
+.app-link{
+  margin: 40px 0 20px;
+  text-align: center;
+}
+.app-link a{
+  display: inline-block;
+  padding: 14px 40px;
+  background: #6b8fd4;
+  color: #fff;
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px){
+
+  /* ページの左右余白を少し小さく */
+  .page{
+    margin: 12px auto;
+    padding: 10px 12px 28px;
+  }
+
+  /* ヘッダー文字を小さく */
+  .pink-title{
+    font-size: 24px;
+  }
+
+  /* スクショを縦並びにする */
+  .app-shot{
+    flex-direction: column;
+    padding: 16px;
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  /* 画像は画面幅に合わせる */
+  .app-shot img{
+    max-width: 100%;
+  }
+
+  /* 説明文もちょい小さく */
+  .app-desc{
+    font-size: 16px;
+    line-height: 1.9;
+    padding: 0 4px;
+  }
+
+  /* ドキュメントリンク：折り返して見やすく */
+  .docs{
+    margin: 26px 0;
+  }
+
+  .docs a{
+    display: inline-block;
+    margin: 8px 12px;
+    font-size: 16px;
+  }
+
+  /* ボタンを画面幅に近づける */
+  .app-link a{
+    width: min(320px, 92%);
+    text-align: center;
+    padding: 14px 0;
+  }
+}

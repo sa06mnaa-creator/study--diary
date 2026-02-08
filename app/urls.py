@@ -33,8 +33,8 @@ urlpatterns = [
     name="password_reset_complete",
 ),
    path('stamp/<int:goal_id>/',views.stamp_select, name="stamp_select"),
-
-   path('calendar/<int:year>/<int:month>/', views.calendar_view, name="calendar"),
+   path('calendar/', views.calendar, name="calendar"),
+   path('calendar/<int:year>/<int:month>/', views.calendar_view, name="calendar_view"),
    path('not_achieved/', views.not_achieved, name="not_achieved"),
    path('mypage/', views.mypage, name='mypage'),
    path('goal/add/', views.goal_create, name='goal_create'),
@@ -43,4 +43,5 @@ urlpatterns = [
    #「目標」を押したら行く記録画面↓
    path("study/<int:goal_id>/", views.study_record, name="study_record"),
    path('icon/change/', views.icon_change, name="icon_change"),
+   path('', views.index, name='index'),
    ]

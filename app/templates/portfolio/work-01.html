@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+</head>
+<body>
+
+  <header class="pink-header">
+    <h1 class="pink-title">Study diary</h1></header>
+  <main class="page">
+    <section class="app-shot">
+      <img src="{% static 'img/home.png' %}" alt="ホーム画面">
+      <img src="{% static 'img/calendar.png' %}" alt="カレンダー画面">
+    </section>
+
+    <section class="app-desc">
+      <p>
+        Study Diary は、中学生ユーザーが日々の学習目標を設定し、自分で作成したスタンプをカレンダーに記録し、達成状況を振り返れるアプリです。
+        目標の達成状況や継続度が一目で分かることや、自分でスタンプを作成できることで、学習のモチベーションを高めることが期待できます。
+      </p>
+    </section>
+
+    <nav class="docs">
+      <a href="{% static 'docs/kikaku.pdf' %}" target="_blank" rel="noopener">企画書</a>
+      <a href="{% static 'docs/screen-design2.pdf' %}" target="_blank" rel="noopener">画面設計図</a>
+      <a href="{% static 'docs/screen-transition.pdf' %}" target="_blank" rel="noopener">画面遷移図</a>
+      <a href="{% static 'docs/er.pdf' %}" target="_blank" rel="noopener">ER図</a>
+    </nav>
+
+    <div class="app-link">
+      <a href="/study-diary/" target="_blank">
+        このアプリにアクセス
+      </a>
+    </div>
+
+        
+      
+      

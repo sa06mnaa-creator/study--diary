@@ -20,6 +20,7 @@ from .models import Goal
 from django.db.models import Exists, OuterRef
 from django.conf import settings
 from .forms import ProfileIconForm
+from django.http import HttpResponse
 
 @login_required
 def home(request):
@@ -208,14 +209,13 @@ def stamp_select(request, goal_id):
         "goal": goal
         })
 def calendar(request):
-    records = StudyRecord.objects.filter(
-        user=request.user
-    )
-    return render(
-        request,
-        "accounts/calendar.html",
-        { records: records
-        }
+    today = date.today()
+    
+    return redirect(
+        "accounts:calendar_view",
+         year=today.year,
+         month=today.month,
+
     )
 def calendar_view(request, year, month):
     today = date.today()
@@ -256,7 +256,6 @@ def calendar_view(request, year, month):
             "next_year": next_year,
             "next_month": next_month,
             "today": today,
-            "month_days": month_days,
             
    
     })
@@ -299,3 +298,9 @@ def record_top(request):
         "accounts/record_top.html",
         {"goals": goals}
     )
+
+def portfolio(request):
+    return render(request, 'portfolio/work-01.html')
+
+def index(request):
+    return HttpResponse('templates/index.html')

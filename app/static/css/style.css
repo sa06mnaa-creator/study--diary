@@ -15,18 +15,15 @@ body{
      top:0;
 
 }
-.header-icon-linl{
-     display: inline-flex;
+.header-icon-link{
+     display: flex;
      align-items: center;
      justify-content: center;
-     text-decoration: none;
+     width: 40px;
+     height: 40px;
 }
-.header-user-icon{
-     width: 36px;
-     height: 36px;
-     border-radius: 50%;
-     object-fit: cover;
-}
+
+
 .header-user-emoji{
      font-size: 22px;
 }
@@ -176,12 +173,8 @@ button.btn-submit{
      color: #000;
      text-decoration: none;
 }
-.profile-icon{
-     width: 80px;
-     height: 80px;
-     border-radius: 50px;
-     object-fit: cover;
-}
+
+
 .icon-hint{
      font-size: 12px;
 }
@@ -218,10 +211,11 @@ button.btn-submit{
 }
 
 .profile-icon {
-  width: 90px;
-  height: 90px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
+  display: block;
 }
 
 
@@ -273,12 +267,7 @@ button.btn-submit{
   color: #000;
 }
 
-.profile-icon{
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+
 .simple-modal{
      position: fixed;
      inset: 0;
@@ -804,4 +793,75 @@ button.btn-submit{
 }
 .one-line{
      white-space: nowrap;
+}
+
+
+.app-header img{
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+}
+.header-icon-link{
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 40px !important;
+}
+
+.header-user-icon{
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+
+  display: block !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+.goal-container{
+     max-width: 320px;
+     margin: 0 auto;
+     padding: 24px;
+     background: #fff;
+     border-radius: 8px;
+}
+.page{
+     display: flex;
+     justify-content: center;
+     align-content: center;
+}
+.form-actions{
+     margin-top: 24px;
+     text-align: center;
+}
+.btn-primary{
+     background: #2f6fff;
+     color: #fff;
+     border: none;
+     padding: 12px 32px;
+     font-size: 16px;
+     font-weight: 600;
+     border-radius: 8px;
+     cursor: pointer;
+}
+.btn-home{
+     display: inline-block;
+     margin: 16px 0;
+     padding: 10px 20px;
+     background: #2f6fff;
+     color: #fff;
+     text-decoration: none;
+     border-radius: 8px;
+     font-size: 14px;
+     font-weight: 600;
+     text-align: center;
+     
+}
+.calendar-actions{
+     text-align: center;
+     margin-top: 24px;
 }

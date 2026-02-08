@@ -6,9 +6,9 @@
 <div class="calendar-container">
 
   <div class="calendar-header">
-    <a href="{% url 'accounts:calendar' prev_year prev_month %}" class="month-nav">&lt;</a>
+    <a href="{% url 'accounts:calendar_view' prev_year prev_month %}" class="month-nav">&lt;</a>
     <span class="calendar-title">{{ year }}年{{ month }}月</span>
-    <a href="{% url 'accounts:calendar' next_year next_month %}" class="month-nav">&gt;</a>
+    <a href="{% url 'accounts:calendar_view' next_year next_month %}" class="month-nav">&gt;</a>
   </div>
   <table border="1">
    <tr>
@@ -82,6 +82,8 @@
 </div>
 {% endwith %}
 {% endfor %}
+<div class="calendar-actions">
 
-<a href="{% url 'accounts:home' %}" class="btn-gray">ホームに戻る</a>
+<a href="{% url 'accounts:home' %}" class="btn-home">ホームに戻る</a>
+</div>
 {% endblock %}
