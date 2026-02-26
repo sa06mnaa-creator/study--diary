@@ -1,21 +1,25 @@
-body{
+.body{
      margin: 0;
      font-family: sans-serif;
 }
 .app-header{
-     background-color: #f6cfd0;
+     background-color: #f6cfd0 !important;
      height: 60px;
-     display: flex;
+     display: flex; !important;
      z-index: 2000;
-     align-items: center;
-     justify-content: space-between;
+     align-items: center; !important;
+     justify-content: space-between !important;
      padding: 0 16px;
      position: fixed;
      width: 100%;
      top:0;
-
+     left:0;
+     box-sizing: border-box;
+     flex-wrap: nowrap !important;
 }
 .header-icon-link{
+     flex: 0 0 auto !important;
+     margin-left: 12px !important;
      display: flex;
      align-items: center;
      justify-content: center;
@@ -28,13 +32,21 @@ body{
      font-size: 22px;
 }
 .app-title{
+     flex: 1 1 auto !important;
+     display: block !important;
+     width: auto !Important;
      font-size: 18px;
-     margin: 0;
+     margin: 0 !important;
      text-decoration: none;
      color: #333
 }
 .user-icon{
      font-size: 22px;
+     width: 40px;
+     height: 40px;
+     border-radius: 50%;
+     object-fit: cover;
+     display: block;
 }
 .content{
      padding: 20px;
@@ -70,11 +82,11 @@ body{
      margin-bottom: 5px;
      font-weight: bold;
 }
-input, textarea{
+.input-textarea{
      padding: 8px;
      font-size: 14px;
 }
-button.btn-submit{
+.button.btn-submit{
      display: block;
      width: 120px;
      margin: 20px auto;
@@ -101,10 +113,7 @@ button.btn-submit{
      background: #eee;
      border-radius: 6px;
 }
-.btn-achieved{
-     background-color: #4a86e8;
-     color: white;
-}
+
 .btn-record{
      display: block;
      width: 100%;
@@ -134,6 +143,13 @@ button.btn-submit{
      padding: 16px;
      border-radius: 8px;
      margin-bottom: 20px;
+}
+.profile-icon{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+
 }
 .panel-title{
      margin-bottom: 12px;
@@ -207,7 +223,9 @@ button.btn-submit{
 
 /* アイコン */
 .icon-preview {
-  margin-bottom: 16px;
+  display: flex;
+  margin-bottom: 16px 0;
+  justify-content: center;
 }
 
 .profile-icon {
@@ -216,17 +234,18 @@ button.btn-submit{
   border-radius: 50%;
   object-fit: cover;
   display: block;
+  margin: 0 ;
 }
 
 
-.icon-select-card {
+.icon-change-card {
   background: #f2f2f2;
   padding: 16px;
   border-radius: 10px;
   margin-bottom: 20px;
 }
 
-.icon-select-title {
+.icon-change-title {
   font-weight: bold;
   margin-bottom: 12px;
 }
@@ -296,6 +315,16 @@ button.btn-submit{
      border-radius: 6px;
      margin-right: 10px;
 }
+.btn-no{
+    background: #eee;
+    border: none;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size: 16px;
+}
 .footer-item {
      display: flex;
      flex: 1;
@@ -321,7 +350,7 @@ button.btn-submit{
      display: grid;
      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
      gap: 12px;
-     
+
 }
 .goal-card{
      border: 2px solid #999;
@@ -352,7 +381,9 @@ button.btn-submit{
      text-decoration: none;
 }
 .calendar-container{
-    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -564,7 +595,15 @@ button.btn-submit{
      text-align: center;
 }
 .not-achieved-wrapper{
+     height: calc(100vh - 240px);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
      text-align: center;
+     margin: 0;
+     padding: 0 16px;
+     box-sizing: border-box;
 }
 .record-wrapper{
      display: flex;
@@ -575,7 +614,7 @@ button.btn-submit{
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;      
+  align-items: center;
 }
 .record-inner{
   width: 100%;
@@ -588,12 +627,17 @@ button.btn-submit{
   margin: 8px 0 14px;
 }
 .record-date input{
-  width: 100%;
+  width: 90%;
+  max-width: 100%;
+  display: block;
   padding: 10px 12px;
   border: 1px solid #777;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 .record-card{
+  width: 100%;
+  box-sizing: border-box;
   margin-top: 14px;
   border: 1px solid #666;
   padding: 14px;
@@ -622,9 +666,8 @@ button.btn-submit{
 .record-form{
   margin: 0;
 }
-.btn-achieved,
+
 .btn-not{
-  width: 220px;
   padding: 10px 0;
   border-radius: 8px;
   border: 2px solid #333;
@@ -632,10 +675,24 @@ button.btn-submit{
   cursor: pointer;
 }
 .btn-achieved{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: 2px solid #333;
+  font-weight: bold;
+  cursor: pointer;
   background: #3b73cf;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
 }
 .btn-not{
+  width: 100%;
+  box-sizing: border-box;
   background: #ddd;
   color: #111;
 }
@@ -745,6 +802,7 @@ button.btn-submit{
 .color-dot.pink { background-color: pink; }
 .color-dot.orange{ background-color: orange; }
 .color-dot.yellow{ background-color: yellow; }
+.color-dot.lightgreen{ background-color: lightgreen; }
 .color-dot.green{ background-color: green; }
 .color-dot.lightblue{ background-color: skyblue; }
 .color-dot.blue{ background-color: blue; }
@@ -758,12 +816,13 @@ button.btn-submit{
 .calendar-stamp.red{ color: red; }
 .calendar-stamp.pink{ color: pink; }
 .calendar-stamp.orange{ color: orange; }
-.calendar-stamp.yellow{ color: #d4b200; }  
+.calendar-stamp.yellow{ color: #d4b200; }
+.calendar-stamp.lightgreen{ color: #a8e063; }
 .calendar-stamp.green{ color: green; }
 .calendar-stamp.lightblue{ color: skyblue; }
 .calendar-stamp.blue{ color: #3b73cf; }
 .calendar-stamp.purple{ color: purple; }
-.calendar-stamp.black{ color: black; 
+.calendar-stamp.black{ color: black;
 }
 .stamp{
   font-size: 22px;
@@ -784,7 +843,7 @@ button.btn-submit{
      min-height: calc(100vh - 56px);
      display: flex;
      justify-content: center;
-    
+
      padding: 16px;
 }
 .record-top-inner{
@@ -796,7 +855,7 @@ button.btn-submit{
 }
 
 
-.app-header img{
+.app-header-img{
   width: auto !important;
   max-width: none !important;
   height: auto !important;
@@ -859,9 +918,137 @@ button.btn-submit{
      font-size: 14px;
      font-weight: 600;
      text-align: center;
-     
+
 }
 .calendar-actions{
      text-align: center;
      margin-top: 24px;
+}
+
+/* ---- スマホでフォームを見やすくする共通設定 ---- */
+.page{
+  width: min(92%, 520px);
+  margin: 20px auto;
+  padding: 18px 14px 24px;
+}
+
+form{
+  width: 100%;
+}
+
+form input,
+form select,
+form textarea{
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;   /* iPhoneの勝手ズーム防止 */
+  padding: 12px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* form.as_p のときの p を整える */
+form p{
+  margin: 14px 0;
+}
+
+/* ボタンを大きく */
+.btn-primary-full, form button[type="submit"]{
+  width: 100%;
+  padding: 14px 0;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+/* ラベルを読みやすく */
+label{
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.auth-form-wrapper{
+  width: 92%;
+  max-width: 480px;
+  margin: 80px auto 40px;
+}
+
+.auth-form input{
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.auth-form button,
+.auth-form input[type="submit"]{
+  width: 100%;
+  padding: 14px 0;
+}
+/* エラーメッセージを赤く */
+.errorlist{
+  color: #cc0000;
+  font-size: 14px;
+  margin-top: 6px;
+  padding-left: 16px;
+}
+
+.errorlist li{
+  margin-bottom: 4px;
+}
+.alert{
+    background: #ffe5e5;
+    color: #d93025;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 12px;
+    text-align: center;
+}
+}
+.error-message{
+    color: #cc0000;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+.selected-date{
+    margin: 0 auto;
+    max-width: 360px;
+    padding: 14px 16px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+
+}
+.date-box{
+    margin: 12px auto;
+    position: relative;
+    max-width: 360px;
+}
+.date-input{
+    inset: 0;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+.same-width{
+    margin-left: auto;
+    margin-right: auto;
+}
+.form-hint{
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-top: 6px;
+    line-height: 1.5;
+    opacity: 0.8;
+}
+.calendar-page{
+    padding-top: 60px;
+    box-sizing: border-box;
+}
+.auth-error{
+    color: #d93025;
+    font-size: 14px;
+    margin-top: 6px;
 }

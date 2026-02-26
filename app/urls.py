@@ -1,7 +1,9 @@
-from django.urls import path
+
 from app import views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from django.urls import path
+
 
 app_name = 'accounts'
 
@@ -23,17 +25,34 @@ urlpatterns = [
         template_name="accounts/password_reset_done.html",
     ),name="password_reset_done",
 ),
-    path("reset/<uidb64>/<token>/",auth_views.PasswordResetConfirmView.as_view(
+    path("password-reset/<uidb64>/<token>/",auth_views.PasswordResetConfirmView.as_view(
         template_name="accounts/password_reset_confirm.html",
-        success_url=reverse_lazy("accounts:login"),
+        success_url=reverse_lazy("accounts:password_reset_complete"),
     ),
     name="password_reset_confirm",
 ),
-    path("reset/done/",views.password_reset_complete_redirect,
+    path("password-reset-complete/",views.password_reset_complete_redirect,
     name="password_reset_complete",
 ),
+    path(
+    "password_change/",
+    auth_views.PasswordChangeView.as_view(
+        template_name="accounts/password_change.html",
+        success_url=reverse_lazy("accounts:mypage"),
+    ),
+    name="password_change",
+),
+
+    path(
+    "password_change/done/",
+    auth_views.PasswordChangeDoneView.as_view(
+        template_name="accounts/password_change_done.html",
+    ),
+    name="password_change_done",
+),
+
    path('stamp/<int:goal_id>/',views.stamp_select, name="stamp_select"),
-   path('calendar/', views.calendar, name="calendar"),
+   path('calendar/', views.calendar_redirect, name='calendar'),
    path('calendar/<int:year>/<int:month>/', views.calendar_view, name="calendar_view"),
    path('not_achieved/', views.not_achieved, name="not_achieved"),
    path('mypage/', views.mypage, name='mypage'),
@@ -43,5 +62,4 @@ urlpatterns = [
    #「目標」を押したら行く記録画面↓
    path("study/<int:goal_id>/", views.study_record, name="study_record"),
    path('icon/change/', views.icon_change, name="icon_change"),
-   path('', views.index, name='index'),
-   ]
+  ]

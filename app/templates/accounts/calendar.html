@@ -3,6 +3,7 @@
 
 {% block content %}
 
+<div class="calendar-page">
 <div class="calendar-container">
 
   <div class="calendar-header">
@@ -10,6 +11,11 @@
     <span class="calendar-title">{{ year }}年{{ month }}月</span>
     <a href="{% url 'accounts:calendar_view' next_year next_month %}" class="month-nav">&gt;</a>
   </div>
+
+  <p class="form-hint">
+      記録したスタンプを確認できます。
+      過去の頑張りを振り返ってみましょう。
+  </p>
   <table border="1">
    <tr>
     <th>日</th><th>月</th><th>火</th><th>水</th>
@@ -20,7 +26,14 @@
     {% for day in week %}
     <td valign="top" style="width:45px; height:60px;">
         {{ day.day }}
+        {% if day in goals_dict %}
+          {% for goal in goals_dict|dict_get:day %}
 
+            <div>
+                <a href="{% url 'accounts:stamp_select' goal.id %}?date={{day|date:'Y-m-d' }}">スタンプ</a>
+            </div>
+        　{% endfor %}
+        {% endif %}
         {% if day in stamp_dict %}
             {% with records=stamp_dict|dict_get:day %}
                 {% with record=records.0 %}
@@ -31,9 +44,9 @@
                     {% if record.stamp_shape == "circle" %}●{% endif %}
                     {% if record.stamp_shape == "smile" %}☻{% endif %}
                     {% if record.stamp_shape == "heart" %}♡{% endif %}
-                    {% if record.stamp_shape == "sun" %}☀{% endif %}
+                    {% if record.stamp_shape == "sun" %}☼{% endif %}
                     {% if record.stamp_shape == "moon" %}☽{% endif %}
-                    {% if record.stamp_shape == "cloud" %}☁{% endif %}
+                    {% if record.stamp_shape == "cloud" %}&#x2601;&#xFE0E;{% endif %}
                 </div>
                 {% endwith %}
 
@@ -68,9 +81,9 @@
             {% if record.stamp_shape == "circle" %}●{% endif %}
             {% if record.stamp_shape == "smile" %}☻{% endif %}
             {% if record.stamp_shape == "heart" %}♡{% endif %}
-            {% if record.stamp_shape == "sun" %}☀{% endif %}
+            {% if record.stamp_shape == "sun" %}☼{% endif %}
             {% if record.stamp_shape == "moon" %}☽{% endif %}
-            {% if record.stamp_shape == "cloud" %}☁{% endif %}
+            {% if record.stamp_shape == "cloud" %}&#x2601;&#xFE0E;{% endif %}
           </span>
           {{ record.subject }}
         </div>
@@ -85,5 +98,6 @@
 <div class="calendar-actions">
 
 <a href="{% url 'accounts:home' %}" class="btn-home">ホームに戻る</a>
+</div>
 </div>
 {% endblock %}

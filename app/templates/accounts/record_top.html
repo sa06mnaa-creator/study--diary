@@ -3,13 +3,33 @@
 
 <div class="record-top-wrapper">
     <div class="record-top-inner">
-<h2>どの教科を記録する？</h2>
+<h2>どの目標を記録する？</h2>
+<div class="form-hint">
+    <p>未記録の目標一覧です。<br>
+       一度記録したらここから消えます。<br>
+
+    </p>
+</div>
 
     <div class="goal-grid">
     {% for goal in goals %}
-    <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
+    <a href="{% url 'accounts:study_record' goal.id %}?date={{ goal.date|date:'Y-m-d' }}" class="goal-card">
+
+        <div class="goal-subject">
         {{ goal.subject }}
+        </div>
+
+        <ul class="goal-detail">
+            <li>{{ goal.date|date:"Y年n月j日(D)" }}</li>
+            <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
+
+            {% if goal.page_start %}
+              <li>{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
+            {% endif %}
+        </ul>
+
     </a>
+
     {% empty %}
     <p class="one-line">まだ目標がありません</p>
     {% endfor %}

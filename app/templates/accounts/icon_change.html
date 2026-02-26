@@ -7,30 +7,52 @@
 
     <h2 class="icon-title">アイコンを変更</h2>
 
-    
-    <div class="icon-preview">
-      <img src="{{ profile.icon.url }}" class="profile-icon">
+    <div class="icon-preview" style="display:flex; justify-content:center;">
+        {% if profile.icon %}
+          <img id="iconPreview" src="{{ profile.icon.url }}" class="profile-icon" alt="プロフィール画像">
+        {% else %}
+          <img id="iconPreview" src="{% static 'img/user.png' %}" class="profile-icon" alt="デフォルトアイコン">
+        {% endif %}
     </div>
 
-    
     <form method="post" enctype="multipart/form-data" class="icon-change-card">
-  {% csrf_token %}
+      {% csrf_token %}
 
+      <label class="icon-btn">
+        画像を選択
+        <input id="iconInputGallery" type="file" name="icon_gallery" accept="image/*">
+      </label>
 
-  <label class="icon-btn">
-    画像を選択
-    <input type="file" name="icon_gallery" accept="image/*">
-  </label>
+      <label class="icon-btn">
+        写真を撮る
+        <input id="iconInputCamera" type="file" name="icon_camera" accept="image/*" capture="environment">
+      </label>
 
- 
-  <label class="icon-btn">
-    写真を撮る
-    <input type="file" name="icon_camera" accept="image/*" capture="environment">
-  </label>
+      <button type="submit" class="btn-primary-full">更新</button>
+      <a href="{% url 'accounts:profile_edit' %}" class="btn-gray-full">キャンセル</a>
+    </form>
 
-  <button type="submit" class="btn-primary-full">更新</button>
-  <a href="{% url 'accounts:profile_edit' %}" class="btn-gray-full">キャンセル</a>
-</form>
+  </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const preview = document.getElementById("iconPreview");
+  const gallery = document.getElementById("iconInputGallery");
+  const camera = document.getElementById("iconInputCamera");
+
+  const setPreview = (file) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    preview.src = URL.createObjectURL(file);
+  };
+
+  [gallery, camera].forEach((input) => {
+    if (!input) return;
+    input.addEventListener("change", () => {
+      setPreview(input.files && input.files[0]);
+    });
+  });
+});
+</script>
 
 {% endblock %}

@@ -3,38 +3,64 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="{% static 'css/portfolio.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study diary | ポートフォリオ</title>
+  <link rel="stylesheet" href="/static/css/portfolio.css?v=20260213-2">
 </head>
+
 <body>
+  <header class="pf-header">
+      <div class="pf-header__inner">
+        <h1 class="title">Study diary</h1>
+        <p class="subtitle">学習記録アプリ（Django）</p>
+      </div>
+  </header>
 
-  <header class="pink-header">
-    <h1 class="pink-title">Study diary</h1></header>
-  <main class="page">
-    <section class="app-shot">
-      <img src="{% static 'img/home.png' %}" alt="ホーム画面">
-      <img src="{% static 'img/calendar.png' %}" alt="カレンダー画面">
-    </section>
-
-    <section class="app-desc">
-      <p>
-        Study Diary は、中学生ユーザーが日々の学習目標を設定し、自分で作成したスタンプをカレンダーに記録し、達成状況を振り返れるアプリです。
-        目標の達成状況や継続度が一目で分かることや、自分でスタンプを作成できることで、学習のモチベーションを高めることが期待できます。
+  <main class="pf-container">
+    <section class="pf-card">
+      <h2 class="pf-h2">概要</h2>
+      <p class="pf-text">
+        Study diaryは、中学生ユーザーが日々の学習目標を設定し、自分で作成したスタンプをカレンダーに記録し、
+        達成状況をカレンダーで振り返れるアプリです。
       </p>
     </section>
 
-    <nav class="docs">
-      <a href="{% static 'docs/kikaku.pdf' %}" target="_blank" rel="noopener">企画書</a>
-      <a href="{% static 'docs/screen-design2.pdf' %}" target="_blank" rel="noopener">画面設計図</a>
-      <a href="{% static 'docs/screen-transition.pdf' %}" target="_blank" rel="noopener">画面遷移図</a>
-      <a href="{% static 'docs/er.pdf' %}" target="_blank" rel="noopener">ER図</a>
-    </nav>
+    <section class="pf-card">
+      <h2 class="h2">スクリーンショット</h2>
 
-    <div class="app-link">
-      <a href="/study-diary/" target="_blank">
-        このアプリにアクセス
-      </a>
-    </div>
+      <nav class="shots">
+        <figure class="shot">
+          <img src="{% static 'img/home.png' %}" alt="ホーム画面">
+          <figcaption>ホーム</figcaption>
+        </figure>
 
-        
-      
-      
+        <figure class="shot">
+          <img src="{% static 'img/calendar.png' %}" alt="カレンダー画面">
+          <figcaption>カレンダー</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="pf-card">
+      <h2 class="pf-h2">資料</h2>
+      <nav class="pf-docs">
+        <a href="{% static 'docs/kikaku9.pdf' %}?v=1" target="_blank" rel="noopener">企画書</a>
+        <a href="{% static 'docs/screen-design3.pdf' %}?v=1" target="_blank" rel="noopener">画面設計図</a>
+        <a href="{% static 'docs/screen-transition.pdf' %}?v=1" target="_blank" rel="noopener">画面遷移図</a>
+        <a href="{% static 'docs/er.pdf' %}?v=1" target="_blank" rel="noopener">ER図</a>
+      </nav>
+    </section>
+
+    <section class="pf-card pf-center">
+      <a class="pf-btn" href="{% url 'accounts:home' %}">このアプリにアクセス</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>© Study diary</small>
+  </footer>
+</body>
+</html>
+
+
+

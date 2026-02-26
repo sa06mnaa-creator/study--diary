@@ -7,9 +7,14 @@
 <form method="post">
     {% csrf_token %}
 
-    <p> 
-        日付<br>
+    <p>
+        達成目標日<br>
         {{ form.date }}
+        <br>
+        <span class="form-hint">
+            達成を目指す日付を選んでください。
+            達成できた日は記録画面からスタンプを押すことができます。
+        </span>
     </p>
 
     <p>

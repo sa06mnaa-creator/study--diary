@@ -10,6 +10,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import Q
 
 
 class CustomUserManager(BaseUserManager):
@@ -48,7 +49,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
-    
+
 class UserActivateToken(models.Model):
     token = models.UUIDField(db_index=True, unique=True)
     expired_at = models.DateTimeField()
@@ -58,7 +59,7 @@ class UserActivateToken(models.Model):
         related_name='user_activate_token'
     )
 
-    
+
 
     class Meta:
         db_table = 'user_activate_token'
@@ -88,6 +89,7 @@ def create_profile(sender, instance, created, **kwargs):
 
 class StudyRecord(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    goal = models.ForeignKey("Goal", on_delete=models.SET_NULL, null=True, blank=True)
     subject = models.CharField(max_length=50)
     date = models.DateField()
     achieved = models.BooleanField(default=True)
@@ -95,12 +97,21 @@ class StudyRecord(models.Model):
         max_length=20,
         choices=[
             ('achieved', '達成'),('not_achieved', '未達成'),
-            ]
+            ],
+        default="achieved",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     stamp_shape = models.CharField(max_length=20, blank=True)
     stamp_color = models.CharField(max_length=20, blank=True)
-                                                      
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "goal"],
+                condition=Q(goal__isnull=False),
+                name="uniq_record_per_goal_per_user",
+            )
+        ]
 
 class Goal(models.Model):
     user = models.ForeignKey(
@@ -116,4 +127,3 @@ class Goal(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.subject}"
-         

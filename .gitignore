@@ -1,4 +1,9 @@
 db.sqlite3
 media/
 __pycache__/
-.env
+.envvenv/
+staticfiles/
+__pycache__/
+*.pyc
+*.swp
+.DS_Store

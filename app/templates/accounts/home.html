@@ -1,35 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
+
 {% if not user.is_authenticated %}
-   
-    <p>ログインしていません</p>
+  <p>ログインしていません</p>
 {% endif %}
+
+<div class="form-hint">
+    <p>まずは「目標を追加」からスタート！<br>
+       学習時間やページ数を設定してみましょう。<br>
+       目標をタップすると記録出来ます。（記録は上書きされます）<br>
+    </p>
+</div>
+
 <div class="home-container">
-<div class="goal-box">
+  <div class="goal-box same-width">
     <h3>【達成目標】</h3>
     <p>{{ profile.goal|linebreaksbr }}</p>
-</div>
-<div class="date-box">
-    {% now "Y年n月j日 (D)" %}
-        </div>
-<h3>今日の目標</h3>
+  </div>
 
-    {% if goals %}
+  <form method="get" class="date-box">
+      <input
+       id="datePicker"
+       type="date"
+       name="date"
+       value="{{ selected_date|date:'Y-m-d' }}"
+       class="date-input"
+       onchange="this.form.submit()">
+
+
+<div class="selected-date"
+     onclick="const el=document.getElementById('datePicker'); el.showPicker?.(); el.focus();">
+    {{ selected_date|date:"Y年n月j日 (D)" }}
+</div>
+</form>
+  {% if goals %}
     <div class="goal-grid">
-    {% for goal in goals %}
-    <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
-        <div class="goal-subject">{{ goal.subject }}</div>
-        <ul class="goal-detail">  
-         <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
-         {% if goal.page_start %}<li>ページ{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
-         {% endif %}
-        </ul>
-    </a>
-    {% endfor %}
+      {% for goal in goals %}
+        <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
+          <div class="goal-subject">{{ goal.subject }}</div>
+          <ul class="goal-detail">
+            <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
+            {% if goal.page_start %}
+              <li>ページ{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
+            {% endif %}
+          </ul>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>この日の目標はありません</p>
+  {% endif %}
+
+
+  <a href="{% url 'accounts:goal_create' %}?date={{ selected_date|date:'Y-m-d' }}" class="add-button">＋追加</a>
 </div>
-{% else %}
-<p>まだ目標がありません</p>
-{% endif %}
-<a href="{% url 'accounts:goal_create' %}" class="add-button">＋追加</a>
-</div>
+
 {% endblock %}

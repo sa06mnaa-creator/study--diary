@@ -17,8 +17,8 @@
             </a>
         </div>
 
-        
-    
+
+
     <div class="form-item">
     <label>名前</label>
     {{ form.name }}
@@ -29,9 +29,14 @@
     </div>
     <div class="form-item">
     <label>【達成目標】(２０文字以内)</label>
+　　<div class="form-hint">
+    <p>あなたが最終的に最終的に叶えたい目標を書いてください。<br>
+
+    </p>
+
     <textarea name="goal">{{ profile.goal }}</textarea>
     </div>
-    
+
     <button type="submit" class="btn-submit">登録</button>
 </form>
 {% endblock %}

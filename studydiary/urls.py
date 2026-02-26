@@ -32,16 +32,13 @@ urlpatterns = [
     ),
     path(
         'reset/done/',
-        views.password_reset_complete_redirect, 
+        views.password_reset_complete_redirect,
         name='password_reset_complete'),
-    
+
     path(
         '', views.portfolio, name='portfolio'
     ),
 
-    path(
-        'study-diary/', include('app.urls')
-    ),
 ]
 
 if settings.DEBUG:

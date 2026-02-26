@@ -5,29 +5,36 @@
 <h2 class="mypage-title">マイページ</h2>
 
 <div class="mypage-top">
-    <div class="mypage-left">
-    {% if profile.icon %}
-        <img src="{{ profile.icon.url }}" class="profile-icon">
-    {% else %}
-        <img src="{% static 'img/user.png' %}" class="profile-icon">
-    {% endif %}
-    </div>
-    
+    <div style="width:100px;height:100px;border-radius:50%;overflow:hidden;margin:16px auto;background:#eee;">
+  {% if profile.icon %}
+    <img src="{{ profile.icon.url }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+  {% else %}
+    <img src="{% static 'img/user.png' %}" style="width:100%;height:100%;object-fit:cover;display:block;">
+  {% endif %}
+</div>
     <div class="mypage-right">
         <button type="button" class="btn-logout" onclick="openModal()">ログアウト</button>
         <a href="{% url 'accounts:profile_edit' %}">プロフィール編集</a>
     </div>
 </div>
 
-<div class="profile-row">
-    <span class="label">名前</span>
-    <span>{{ profile.name }}</span>
-</div>
+<p>
+  名前：
+  {% if profile.name %}
+    {{ profile.name }}
+  {% else %}
+    {{ user.username }}
+  {% endif %}
+</p>
 
-<div class="profile-row">
-    <span class="label">生年月日</span>
-    <span>{{ profile.birthday }}</span>
-</div>
+<p>
+  生年月日：
+  {% if profile.birthday %}
+    {{ profile.birthday }}
+  {% else %}
+    {{ user.birthday }}
+  {% endif %}
+</p>
 
 <div class="profile-goal">
     <P>【達成目標】</p>
@@ -35,7 +42,7 @@
 </div>
 <div class="profile-actions">
   <button onclick="location.href='{% url 'accounts:email_change' %}'">メールアドレス変更</button>
-  <button onclick="location.href='{% url 'password_reset' %}'">パスワード変更</button>
+  <button onclick="location.href='{% url 'accounts:password_change' %}'">パスワード変更</button>
 </div>
 <div id="logout-modal" class="simple-modal hidden">
     <div class="modal-box">
@@ -44,7 +51,7 @@
         <form method="post" action="{% url 'accounts:logout' %}">
             {% csrf_token %}
             <button type="submit" class="btn-yes">はい</button>
-            <button type="button" onclick="closeModal()">いいえ</button>
+            <button type="button" class="btn-no" onclick="closeModal()">いいえ</button>
         </form>
     </div>
 </div>

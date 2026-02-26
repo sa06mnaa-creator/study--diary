@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from . import forms
 from uuid import uuid4
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404,redirect,render
 from . forms import RegistForm
 from . models import UserActivateToken
 from django.contrib import messages
@@ -8,12 +9,10 @@ from datetime import timedelta
 from django.utils import timezone
 from .forms import LoginForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from .models import StudyRecord
 from datetime import date
 from collections import defaultdict
 import calendar as pycalendar
-from .models import Profile, Goal
+from .models import Profile, Goal, StudyRecord
 from .forms import ProfileForm
 from .forms import GoalForm
 from .models import Goal
@@ -21,27 +20,29 @@ from django.db.models import Exists, OuterRef
 from django.conf import settings
 from .forms import ProfileIconForm
 from django.http import HttpResponse
+from django.utils.dateparse import parse_date
 
 @login_required
 def home(request):
-    profile = None
-    user = request.user
+    q = request.GET.get("date")
+    selected_date = parse_date(q) if q else date.today()
 
-    if request.user.is_authenticated:
-        profile = Profile.objects.filter(user=request.user).first()
-        goals = Goal.objects.filter(
-            user=request.user,
-            date=date.today()
-            )
+    if selected_date is None:
+        selected_date = date.today()
 
-    print("ログイン中ユーザー:", user)
-    print("取得したプロフィール:", profile)
-    
+    goals = Goal.objects.filter(
+        user=request.user,
+        date=selected_date
+        ).order_by("id")
+
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(request, "accounts/home.html",{
         "profile": profile,
         "goals": goals,
+        "selected_date": selected_date,
     })
+
 def regist(request):
     if request.method == "POST":
         form = RegistForm(request.POST)
@@ -62,6 +63,7 @@ def regist(request):
         return render(request,'accounts/regist.html', {'regist_form': form,})
     form = RegistForm()
     return render(request, "accounts/regist.html", {"regist_form": form})
+
 def activate_user(request, token):
     activate_form = forms.UserActivateForm(request.POST or None)
     if activate_form.is_valid():
@@ -78,7 +80,7 @@ def user_login(request):
     if login_form.is_valid():
         email = login_form.cleaned_data['email']
         password = login_form.cleaned_data['password']
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
             return redirect('accounts:home')
@@ -97,7 +99,7 @@ def user_logout(request):
 
 @login_required
 def user_edit(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if request.method =='POST':
         form = ProfileForm(
@@ -109,7 +111,15 @@ def user_edit(request):
            form.save()
            return redirect('accounts:mypage')
     else:
+
+        if not profile.name:
+            profile.name = request.user.username or request.user.email
+        if not profile.birthday:
+            profile.birthday = request.user.birthday
+        profile.save()
+
         form = ProfileForm(instance=profile)
+
     return render(request, 'accounts/profile_edit.html',{
             'form': form,
             'profile': profile,
@@ -125,14 +135,16 @@ def email_change(request):
         return redirect('accounts:mypage')
     return render(request, 'accounts/email_change.html')
 
+@login_required
+
 def icon_change(request):
-    profile = request.user.profile  
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
-        file_obj = request.FILES.get("icon_gallery") or request.FILES.get("icon_camera")
+        icon_file = request.FILES.get("icon_gallery") or request.FILES.get("icon_camera")
 
-        if file_obj:
-            profile.icon = file_obj
+        if icon_file:
+            profile.icon = icon_file
             profile.save()
             return redirect("accounts:profile_edit")
         return render(request, "accounts/icon_change.html", {
@@ -143,6 +155,7 @@ def icon_change(request):
         "profile": profile,
     })
 
+@login_required
 def mypage(request):
     profile = Profile.objects.filter(user=request.user).first()
     return render(request, 'accounts/mypage.html', {
@@ -167,58 +180,96 @@ def password_reset(request):
 def password_reset_complete_redirect(request):
     return redirect("accounts:login")
 
+@login_required
 def study_record(request, goal_id):
-    today = timezone.localdate()
-    goal = get_object_or_404(Goal, id=goal_id)
-    
+    goal = get_object_or_404(Goal, id=goal_id, user=request.user)
+
+    q = request.GET.get("date")
+    selected_date = parse_date(q) if q else timezone.localdate()
+    if selected_date is None:
+        selected_date = timezone.localdate()
+
+
     if request.method == "POST":
         action = request.POST.get("action")
 
         if action == "achieved":
-            return redirect(
-                "accounts:stamp_select",
-                goal_id=goal.id,
-            )
+            return redirect(f"/accounts/stamp/{goal.id}/?date={selected_date.strftime('%Y-%m-%d')}")
 
     return render(request,
         "accounts/study_record.html",
         {
             'goal': goal,
-            'date': today,
+            'selected_date': selected_date,
         }
     )
 
+@login_required
 def stamp_select(request, goal_id):
-    goal = get_object_or_404(Goal, id=goal_id, user=request.user)
+    goal = get_object_or_404(
+        Goal,
+        id=goal_id,
+        user=request.user,
+    )
+
+    q = request.GET.get("date")
+    target_date = parse_date(q) if q else None
+    if target_date is None:
+        target_date = date.today()
+
     if request.method == "POST":
+
         shape = request.POST.get("shape")
         color = request.POST.get("color")
-        
-        StudyRecord.objects.create(
+
+        q_post = request.POST.get("date")
+        target_date_post = parse_date(q_post) if q_post else None
+
+        if target_date_post is None:
+            messages.error(request, "日付が不正です。")
+            return redirect("accounts:caledar_view", year=date.today().year, month=date.today().month)
+
+        if not (shape and color):
+            messages.error(request, "スタンプを選んでください。")
+            return redirect("accounts:calendar_view", year=target_date_post.year, month=target_date_post.month)
+
+        StudyRecord.objects.update_or_create(
             user=request.user,
-            subject=goal.subject,
-            date=date.today(),
-            achieved=True,
-            stamp_shape=shape,
-            stamp_color=color,
-
+            goal=goal,
+            defaults={
+                "subject": goal.subject,
+                "date": target_date_post,
+                "achieved": True,
+                "result": "achieved",
+                "stamp_shape": shape,
+                "stamp_color": color,
+            }
         )
-        today = date.today()
-        return redirect('accounts:calendar',year=today.year, month=today.month)
-    return render(request, "accounts/stamp_select.html",{
-        "goal": goal
-        })
-def calendar(request):
-    today = date.today()
-    
-    return redirect(
-        "accounts:calendar_view",
-         year=today.year,
-         month=today.month,
 
-    )
+        return redirect(
+            "accounts:calendar_view",
+            year=target_date_post.year,
+            month=target_date_post.month)
+
+    return render(request, "accounts/stamp_select.html", {
+        "goal": goal,
+        "target_date": target_date,
+    })
+@login_required
 def calendar_view(request, year, month):
+
     today = date.today()
+
+    month_goals = Goal.objects.filter(
+        user=request.user,
+        date__year=year,
+        date__month=month,
+    ).order_by("date", "id")
+
+    goals_dict = defaultdict(list)
+    for g in month_goals:
+        goals_dict[g.date].append(g)
+
 
     cal = pycalendar.Calendar(firstweekday=6)
     month_days= cal.monthdatescalendar(year, month)
@@ -243,6 +294,7 @@ def calendar_view(request, year, month):
         next_month = 1
         next_year += 1
 
+
     return render(
         request,
         "accounts/calendar.html",
@@ -256,43 +308,70 @@ def calendar_view(request, year, month):
             "next_year": next_year,
             "next_month": next_month,
             "today": today,
-            
-   
+
+
     })
 
+@login_required
+
+def calendar_redirect(request):
+    today = date.today()
+    return redirect(
+        'accounts:calendar_view',
+        year=today.year,
+        month=today.month
+    )
 def not_achieved(request):
     today = date.today()
     year = today.year
     month = today.month
-    return render(request,'accounts/not_achieved.html',{ 
+    return render(request,'accounts/not_achieved.html',{
        "year": year,
        "month": month, })
 
+@login_required
 def goal_create(request):
-    if request.method == 'POST':
+    q = request.GET.get("date")
+    initial_date = parse_date(q) if q else None
+
+    if request.method == "POST":
         form = GoalForm(request.POST)
         if form.is_valid():
+            goal_date = form.cleaned_data["date"]
+
+            same_day_count = Goal.objects.filter(user=request.user, date=goal_date).count()
+            if same_day_count >= 6:
+                messages.error(request, "目標は同じ日に6個までです。")
+                return redirect("accounts:home")
+
             goal = form.save(commit=False)
             goal.user = request.user
             goal.save()
-            return redirect('accounts:home')
+            return redirect("accounts:home")
     else:
-        form = GoalForm()
+        form = GoalForm(initial={"date": initial_date} if initial_date else None)
 
-    return render(request, 'accounts/goal_form.html', {
-        'form': form
-    })
+    return render(request, "accounts/goal_form.html", {"form": form})
 def record_create(request, goal_id):
     return render(request, 'accounts/record_form.html',{
         'goal_id': goal_id
     })
+
+@login_required
 def record_top(request):
-    recorded_subjects = StudyRecord.objects.filter(
-        user=request.user
-    ).values_list("subject", flat=True)
-    goals = Goal.objects.filter(
-        user=request.user
-    ).exclude(subject__in=recorded_subjects)
+    achieved_goal_ids =(
+        StudyRecord.objects
+        .filter(user=request.user, result="achieved", goal__isnull=False)
+        .values_list("goal_id", flat=True)
+        .distinct())
+
+    goals = (
+        Goal.objects
+        .filter(user=request.user)
+        .exclude(id__in=achieved_goal_ids)
+        .order_by("date","id")
+        )
+
     return render(
         request,
         "accounts/record_top.html",

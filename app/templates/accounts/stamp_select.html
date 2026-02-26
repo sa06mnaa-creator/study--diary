@@ -4,7 +4,7 @@
 
 <div class="stamp-wrapper">
   <div class="stamp-inner">
-    <div class="stamp-date">{{ today|default:"" }}</div>
+    <div class="stamp-date">{{ target_date|date:"Y年n月j日(D)" }}</div>
 
     <h2 class="stamp-congrats">おめでとう！</h2>
     <p class="stamp-sub">明日も頑張りましょう</p>
@@ -13,6 +13,8 @@
 
     <form method="post" action="{% url 'accounts:stamp_select' goal.id %}" class="stamp-form">
       {% csrf_token %}
+      <input type="hidden" name="date" value="{{ target_date|date:'Y-m-d' }}">
+
 
       <div class="stamp-box">
         <div class="stamp-box-title">形</div>
@@ -31,7 +33,7 @@
           </label>
           <label class="choice">
             <input type="radio" name="shape" value="sun">
-            <span class="choice-ui">☀</span>
+            <span class="choice-ui">☼</span>
           </label>
           <label class="choice">
             <input type="radio" name="shape" value="moon">
@@ -39,7 +41,7 @@
           </label>
           <label class="choice">
             <input type="radio" name="shape" value="cloud">
-            <span class="choice-ui">☁</span>
+            <span class="choice-ui">&#x2601;&#xFE0E;<span>
           </label>
         </div>
       </div>
@@ -62,6 +64,10 @@
           <label class="color-choice">
             <input type="radio" name="color" value="yellow">
             <span class="color-dot yellow"></span>
+          </label>
+          <label class="color-choice">
+            <input type="radio" name="color" value="lightgreen">
+            <span class="color-dot lightgreen"></span>
           </label>
           <label class="color-choice">
             <input type="radio" name="color" value="green">
