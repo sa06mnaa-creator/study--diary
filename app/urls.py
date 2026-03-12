@@ -38,7 +38,7 @@ urlpatterns = [
     "password_change/",
     auth_views.PasswordChangeView.as_view(
         template_name="accounts/password_change.html",
-        success_url=reverse_lazy("accounts:mypage"),
+        success_url=reverse_lazy("accounts:password_change_done"),
     ),
     name="password_change",
 ),
@@ -54,7 +54,7 @@ urlpatterns = [
    path('stamp/<int:goal_id>/',views.stamp_select, name="stamp_select"),
    path('calendar/', views.calendar_redirect, name='calendar'),
    path('calendar/<int:year>/<int:month>/', views.calendar_view, name="calendar_view"),
-   path('not_achieved/', views.not_achieved, name="not_achieved"),
+   path('not_achieved/<int:goal_id>', views.not_achieved, name="not_achieved"),
    path('mypage/', views.mypage, name='mypage'),
    path('goal/add/', views.goal_create, name='goal_create'),
    #フッターの「記録」↓

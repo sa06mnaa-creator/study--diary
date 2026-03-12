@@ -6,8 +6,8 @@
     <h1 class="record-title">記録</h1>
 
     <p class="form-hint">
-        記録したい日付を選んでください。
-        達成できたら「達成！」を押してスタンプを記録しましょう。
+        記録する日付を選び、
+        達成したら「達成！」を押してスタンプをつけましょう。
     </p>
 
     <!-- 日付はGETで保持してページをリロード -->
@@ -15,6 +15,7 @@
       <input type="date"
              name="date"
              value="{{ selected_date|date:'Y-m-d' }}"
+             max="{{ today|date:'Y-m-d' }}"
              onchange="this.form.submit()">
     </form>
 
@@ -33,7 +34,8 @@
       <a href="{% url 'accounts:stamp_select' goal.id %}?date={{ selected_date|date:'Y-m-d' }}"
          class="btn-achieved">達成！</a>
 
-      <form action="{% url 'accounts:not_achieved' %}" method="get">
+      <form action="{% url 'accounts:not_achieved' goal.id %}" method="post">
+          {% csrf_token %}
         <button type="submit" class="btn-not">達成ならず…</button>
       </form>
 

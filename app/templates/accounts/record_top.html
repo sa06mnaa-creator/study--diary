@@ -5,8 +5,8 @@
     <div class="record-top-inner">
 <h2>どの目標を記録する？</h2>
 <div class="form-hint">
-    <p>未記録の目標一覧です。<br>
-       一度記録したらここから消えます。<br>
+    <p>未記録の目標です。<br>
+       記録すると一覧から消えます。<br>
 
     </p>
 </div>
@@ -20,7 +20,7 @@
         </div>
 
         <ul class="goal-detail">
-            <li>{{ goal.date|date:"Y年n月j日(D)" }}</li>
+            <li>{{ goal.date|date:"Y/n/j(D)" }}</li>
             <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
 
             {% if goal.page_start %}

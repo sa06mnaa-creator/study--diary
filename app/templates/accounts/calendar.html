@@ -16,7 +16,7 @@
       記録したスタンプを確認できます。
       過去の頑張りを振り返ってみましょう。
   </p>
-  <table border="1">
+  <table class="calendar-table">
    <tr>
     <th>日</th><th>月</th><th>火</th><th>水</th>
     <th>木</th><th>金</th><th>土</th>
@@ -24,7 +24,7 @@
 {% for week in month_days %}
 <tr>
     {% for day in week %}
-    <td valign="top" style="width:45px; height:60px;">
+    <td class="calendar-day {% if day.month != month %}other-month{% endif %}" style="width:45px; height:60px;">
         {{ day.day }}
         {% if day in goals_dict %}
           {% for goal in goals_dict|dict_get:day %}
@@ -75,21 +75,34 @@
       </div>
 
       <div class="modal-body">
-        {% for record in records %}
-        <div class="mb-2">
-          <span class="calendar-stamp {{ record.stamp_color }}">
-            {% if record.stamp_shape == "circle" %}●{% endif %}
-            {% if record.stamp_shape == "smile" %}☻{% endif %}
-            {% if record.stamp_shape == "heart" %}♡{% endif %}
-            {% if record.stamp_shape == "sun" %}☼{% endif %}
-            {% if record.stamp_shape == "moon" %}☽{% endif %}
-            {% if record.stamp_shape == "cloud" %}&#x2601;&#xFE0E;{% endif %}
-          </span>
-          {{ record.subject }}
-        </div>
-        {% endfor %}
-      </div>
+  {% for record in records %}
+    <div class="mb-2">
+      <span class="calendar-stamp {{ record.stamp_color }}">
+        {% if record.stamp_shape == "circle" %}●{% endif %}
+        {% if record.stamp_shape == "smile" %}☻{% endif %}
+        {% if record.stamp_shape == "heart" %}♡{% endif %}
+        {% if record.stamp_shape == "sun" %}☼{% endif %}
+        {% if record.stamp_shape == "moon" %}☽{% endif %}
+        {% if record.stamp_shape == "cloud" %}&#x2601;&#xFE0E;{% endif %}
+      </span>
 
+      <div>
+        <div>{{ record.subject }}</div>
+
+        {% if record.goal %}
+          <div class="record-meta">
+            <small>
+              {{ record.goal.study_hour }}時間{{ record.goal.study_minute }}分
+              {% if record.goal.page_start %}
+                ／ {{ record.goal.page_start }}〜{{ record.goal.page_end }}ページ
+              {% endif %}
+            </small>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
     </div>
   </div>
 </div>

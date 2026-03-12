@@ -6,9 +6,8 @@
 {% endif %}
 
 <div class="form-hint">
-    <p>まずは「目標を追加」からスタート！<br>
-       学習時間やページ数を設定してみましょう。<br>
-       目標をタップすると記録出来ます。（記録は上書きされます）<br>
+    <p>『目標を追加』から始めましょう。<br>
+       学習時間やページ数を設定し、目標をタップして記録出来ます。<br>
     </p>
 </div>
 
@@ -30,7 +29,7 @@
 
 <div class="selected-date"
      onclick="const el=document.getElementById('datePicker'); el.showPicker?.(); el.focus();">
-    {{ selected_date|date:"Y年n月j日 (D)" }}
+    {{ selected_date|date:"Y/n/j(D)" }}
 </div>
 </form>
   {% if goals %}
@@ -39,9 +38,11 @@
         <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
           <div class="goal-subject">{{ goal.subject }}</div>
           <ul class="goal-detail">
+            {% if goal.study_hour != 0 or goal.study_minute != 0 %}
             <li>{{ goal.study_hour }}時間{{ goal.study_minute }}分</li>
-            {% if goal.page_start %}
-              <li>ページ{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
+            {% endif %}
+            {% if goal.page_start != 0 or goal.page_end != 0 %}
+              <li>{{ goal.page_start }}～{{ goal.page_end }}ページ</li>
             {% endif %}
           </ul>
         </a>

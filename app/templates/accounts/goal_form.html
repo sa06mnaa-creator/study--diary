@@ -3,37 +3,45 @@
 {% block content %}
 <div class="goal-container">
 <h2>目標設定</h2>
-
 <form method="post">
     {% csrf_token %}
 
-    <p>
-        達成目標日<br>
-        {{ form.date }}
-        <br>
-        <span class="form-hint">
-            達成を目指す日付を選んでください。
-            達成できた日は記録画面からスタンプを押すことができます。
-        </span>
-    </p>
-
-    <p>
-        教科名<br>
+    <div class="form-item date-item">
+    <label>達成目標日 *</label>
+    {{ form.date }}
+    {% if goals_count == 0 %}
+    <span class="form-hint">
+        達成を目指す日付を選び、達成したらスタンプを記録しましょう。
+    </span>
+    {% endif %}
+    </div>
+    <div class="form-item">
+        <label>教科名　*</label>
         {{ form.subject }}
-    </p>
+    </div>
 
-    <p>
-        勉強時間<br>
-        {{ form.study_hour }} 時間
-        {{ form.study_minute }} 分
-    </p>
+    <!-- 勉強時間 -->
+    <div class="form-item">
+        <label class="picker-title">勉強時間</label>
+        <div class="time-field">
+            {{ form.study_hour }} <span>時間</span>
+            {{ form.study_minute }} <span>分</span>
+        </div>
+    </div>
 
-    <p>
-        ページ数<br>
-        {{ form.page_start }}ページ～{{ form.page_end }}ページ
-    </p>
+    <!-- ページ数 -->
+    <div class="form-item">
+        <label class="picker-title">ページ数</label>
+        <div class="page-field">
+            {{ form.page_start }}
+            <span class="page-wave">～</span>
+            {{ form.page_end }}
+            <span>ページ</span>
+        </div>
+    </div>
 
     <button type="submit" class="btn-primary">保存</button>
 </form>
+
 </div>
 {% endblock %}

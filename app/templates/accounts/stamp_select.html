@@ -20,7 +20,7 @@
         <div class="stamp-box-title">形</div>
         <div class="choice-grid">
           <label class="choice">
-            <input type="radio" name="shape" value="circle" required>
+            <input type="radio" name="shape" value="circle">
             <span class="choice-ui">○</span>
           </label>
           <label class="choice">
@@ -50,7 +50,7 @@
         <div class="stamp-box-title">色</div>
         <div class="color-grid">
           <label class="color-choice">
-            <input type="radio" name="color" value="red" required>
+            <input type="radio" name="color" value="red">
             <span class="color-dot red"></span>
           </label>
           <label class="color-choice">
@@ -91,10 +91,24 @@
           </label>
         </div>
       </div>
-
+      <p id="stampError" class="stamp-error" style="color:red;"></p>
       <button type="submit" class="stamp-submit">スタンプを押す</button>
     </form>
   </div>
 </div>
 
+<script>
+document.querySelector(".stamp-form").addEventListener("submit", function(e){
+
+  const shape = document.querySelector('input[name="shape"]:checked');
+  const color = document.querySelector('input[name="color"]:checked');
+  const error = document.getElementById("stampError");
+
+  if(!shape || !color){
+      e.preventDefault();
+      error.textContent = "形と色の両方を選んでください";
+  }
+
+});
+</script>
 {% endblock %}

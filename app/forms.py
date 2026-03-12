@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordChangeForm
 from .models import Profile
 from .models import Goal
 
@@ -13,7 +14,7 @@ class RegistForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'type': 'date'})
     )
     password = forms.CharField(
-         label="パスワード(英大文字数字・数字を含む８文字以上)",
+         label="パスワード(英大文字・数字を含む８文字以上)",
          widget=forms.PasswordInput,
     )
     confirm_password = forms.CharField(
@@ -76,6 +77,20 @@ class ProfileIconForm(forms.ModelForm):
           model = Profile
           fields = ['icon']
 
+class MyPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="現在のパスワード",
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"})
+        )
+    new_password1 = forms.CharField(
+        label="新しいパスワード",
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"})
+        )
+    new_password2 = forms.CharField(
+        label="新しいパスワード（確認用）",
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"})
+        )
+
 class PasswordResetForm(forms.ModelForm):
     confirm_password = forms.CharField(label='パスワード再設定',widget=forms.PasswordInput())
     class Meta:
@@ -120,7 +135,8 @@ class GoalForm(forms.ModelForm):
         model = Goal
         fields = ['date', 'subject', 'study_hour', 'study_minute', 'page_start', 'page_end']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'date': forms.DateInput(attrs={'type': 'date',
+                                           'class': 'form-input',})
         }
 
     def clean(self):

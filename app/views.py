@@ -184,11 +184,15 @@ def password_reset_complete_redirect(request):
 def study_record(request, goal_id):
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
 
+    today = timezone.localdate()
+
     q = request.GET.get("date")
     selected_date = parse_date(q) if q else timezone.localdate()
     if selected_date is None:
         selected_date = timezone.localdate()
 
+    if selected_date > today:
+        selected_date = today
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -201,6 +205,7 @@ def study_record(request, goal_id):
         {
             'goal': goal,
             'selected_date': selected_date,
+            'today': today,
         }
     )
 
@@ -351,7 +356,12 @@ def goal_create(request):
     else:
         form = GoalForm(initial={"date": initial_date} if initial_date else None)
 
-    return render(request, "accounts/goal_form.html", {"form": form})
+    goals_count = Goal.objects.filter(user=request.user).count()
+    return render(request, "accounts/goal_form.html", {
+        "form": form,
+        "goals_count": goals_count,
+        })
+
 def record_create(request, goal_id):
     return render(request, 'accounts/record_form.html',{
         'goal_id': goal_id
@@ -359,24 +369,41 @@ def record_create(request, goal_id):
 
 @login_required
 def record_top(request):
-    achieved_goal_ids =(
-        StudyRecord.objects
-        .filter(user=request.user, result="achieved", goal__isnull=False)
-        .values_list("goal_id", flat=True)
-        .distinct())
+
+    recorded_goals = StudyRecord.objects.filter(
+        user=request.user
+    ).values_list("goal_id", flat=True)
+
 
     goals = (
         Goal.objects
         .filter(user=request.user)
-        .exclude(id__in=achieved_goal_ids)
-        .order_by("date","id")
-        )
-
+        .exclude(id__in=recorded_goals)
+    )
     return render(
         request,
         "accounts/record_top.html",
         {"goals": goals}
     )
+
+@login_required
+def not_achieved(request, goal_id):
+    goal = get_object_or_404(Goal, id=goal_id, user=request.user)
+
+    if request.method == "POST":
+        StudyRecord.objects.update_or_create(
+            user=request.user,
+            goal=goal,
+            defaults={
+                "subject": goal.subject,
+                "date": goal.date,
+                "result": "not_achieved",
+                "achieved": False,
+            }
+        )
+        return redirect("accounts:record_top")
+
+    return render(request, "accounts/not_achieved.html", {"goal": goal})
 
 def portfolio(request):
     return render(request, 'portfolio/work-01.html')

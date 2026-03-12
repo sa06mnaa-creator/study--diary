@@ -1,6 +1,15 @@
-.body{
+:root{
+    --main-blue: #5b6df6;
+}
+.html, body{
+    height: 100%;
      margin: 0;
      font-family: sans-serif;
+}
+.body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 .app-header{
      background-color: #f6cfd0 !important;
@@ -54,14 +63,20 @@
 }
 .app-footer{
      background-color: #f6cfd0;
-     height: 80px;
-     position: fixed;
-     bottom: 0;
-     z-index: 2000;
+     height: 72px;
+     position: static;
+     bottom: auto;
+     left: auto;
+     right: auto;
+     z-index: 9999;
      width: 100%;
      display: flex;
+     border-top: 1px solid #ddd;
      justify-content: space-around;
 
+.main, .content, .main-content{
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
 
 }
 .app-footer a{
@@ -73,14 +88,35 @@
      max-width: 400px;
      margin: 0 auto;
 }
+.form-item .birthday-input{
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100% !important;
+  max-width: 280px;
+  box-sizing: border-box;
+}
+
 .form-item{
-     display: flex;
-     flex-direction: column;
-     margin-bottom: 15px;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 20px;
 }
 .form-item label{
-     margin-bottom: 5px;
-     font-weight: bold;
+     margin-bottom: 8px;
+     display: block;
+}
+.date-input-wrap{
+    width: 100%;
+    max-width: 280px;
+}
+.date-input{
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    display: block;
+    -webkit-appearance: none;
+    appearance: none;
 }
 .input-textarea{
      padding: 8px;
@@ -92,7 +128,7 @@
      margin: 20px auto;
      padding: 10px 0;
 
-     background-color: #4a86e8;
+     background-color: #5b6df6;
      color: white;
      font-size: 16px;
      font-weight: bold;
@@ -100,9 +136,6 @@
      border: none;
      border-radius: 6px;
      cursor: pointer;
-}
-.btn-submit:hover{
-     background-color: #3b73cf;
 }
 .btn-gray{
      display: block;
@@ -122,7 +155,7 @@
      text-align: center;
 }
 .btn-logout{
-     background: red;
+     background: #d96b6b;
      color: white;
      padding: 8px 12px;
 }
@@ -175,10 +208,11 @@
 .btn-primary{
      width: 80%;
      padding: 12px;
-     background: #3b73cf;
-     color: #fff;
+     background: #5b6df6;
+     color: white;
      border: none;
      margin-bottom: 10px;
+     margin-top: 16px;
 }
 .btn-secondary{
      display: block;
@@ -277,8 +311,8 @@
 }
 
 .btn-primary-full {
-  background: #3b73cf;
-  color: #fff;
+  background: #5b6df6;
+  color: white;
 }
 
 .btn-gray-full {
@@ -307,13 +341,14 @@
      text-align: center;
      width: 280px;
 }
-.btn-yes {
-     background-color: #3b73cf;
-     color: blue;
+.simple-modal .modal-box .btn-yes {
+     background-color: #d96b6b !important;
+     color: fff;
      border: none;
      padding: 8px 16px;
      border-radius: 6px;
      margin-right: 10px;
+     cursor: pointer;
 }
 .btn-no{
     background: #eee;
@@ -373,8 +408,8 @@
      margin: 20px auto;
      width: 80%;
      text-align: center;
-     background: #4a90e2;
-     color: #fff;
+     background: #5b6df6;
+     color: white;
      padding: 12px;
      border-radius: 6px;
      font-size: 16px;
@@ -383,29 +418,51 @@
 .calendar-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin: 0 auto;
     position: relative;
     z-index: 1;
 }
 .calendar-header{
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
+     display: flex !important;
+     justify-content: center;
+     align-items: center !important;
+     gap: 16px !important;
      margin-bottom: 8px;
      position: relative;
      z-index: 10;
 }
 .calendar-title{
-     font-size: 20px;
+     margin: 0 20px !important;
+     font-size: 24px;
      font-weight: bold;
 }
 .month-nav{
-     font-size: 22px;
+     display: inline-flex !important;
+     font-size: 24px;
      text-decoration: none;
      color: #007bff;
      position: relative;
      z-index: 10;
+     padding: 10px 16px !important;
+}
+.calendar-table{
+    border-collapse: collapse;
+}
+.calendar-table th,
+.calendar-table td{
+    border: 1px solid #ccc;
+    width: 45px;
+    height: 60px;
+    vertical-align: top;
+    padding: 4px;
+}
+
+.calenda-table th{
+    text-align: center;
+    background: "f5f5f5";
+}
+.other-month{
+    color: #bbb;
 }
 .table{
      position: relative;
@@ -445,7 +502,7 @@
 }
 .email-change-box .btn-submit{
      width: 100%;
-     background-color: #4a86e8;
+     background-color: #5b6df6;
      border: none;
      padding: 12px;
      font-size: 16px;
@@ -488,7 +545,7 @@
      display: block;
      width: 100%;
      padding: 14px 0;
-     background-color:#4a86e8;
+     background-color:#5b6df6;
      color: white;
      font-size: 16px;
      border: none;
@@ -500,6 +557,7 @@
      padding-top: 60px;
      padding-bottom: 60px;
      margin-top: 0;
+     flex: 1;
 }
 .login-wrapper{
      min-height: calc(100vh - 120px);
@@ -682,8 +740,8 @@
   border: 2px solid #333;
   font-weight: bold;
   cursor: pointer;
-  background: #3b73cf;
-  color: #fff;
+  background: #5b6df6;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -760,7 +818,7 @@
 
 /* 選択状態（形） */
 .choice input:checked + .choice-ui{
-  outline: 3px solid #3b73cf;
+  outline: 3px solid #5b6df6;
 }
 
 /* 色：丸ドットの並び */
@@ -784,7 +842,7 @@
   cursor: pointer;
 }
 .color-choice input:checked + .color-dot{
-  outline: 3px solid #3b73cf;
+  outline: 3px solid #5b6df6;
 }
 .stamp-submit{
   width: 100%;
@@ -838,6 +896,12 @@
 .stamp.blue{ color: #3b73cf; }
 .stamp.purple{ color: purple; }
 .stamp.black{ color: black;
+}
+
+.stamp-error{
+    color: red !important;
+    font-size: 14px;
+    margin-top: 10px;
 }
 .record-top-wrapper{
      min-height: calc(100vh - 56px);
@@ -897,22 +961,12 @@
      margin-top: 24px;
      text-align: center;
 }
-.btn-primary{
-     background: #2f6fff;
-     color: #fff;
-     border: none;
-     padding: 12px 32px;
-     font-size: 16px;
-     font-weight: 600;
-     border-radius: 8px;
-     cursor: pointer;
-}
 .btn-home{
      display: inline-block;
      margin: 16px 0;
      padding: 10px 20px;
-     background: #2f6fff;
-     color: #fff;
+     background: #5b6df6;
+     color: white;
      text-decoration: none;
      border-radius: 8px;
      font-size: 14px;
@@ -936,15 +990,34 @@ form{
   width: 100%;
 }
 
-form input,
-form select,
-form textarea{
+.form-item input,
+.form-item select,
+.form-item textarea{
   width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
+  display: block;
   font-size: 16px;   /* iPhoneの勝手ズーム防止 */
   padding: 12px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+.form-input[type="date"]{
+    width: 100% !important;
+    max-width: 280px !important;
+    box-sizing: border-box;
+    display: block;
+}
+
+.form-item{
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 20px;
+}
+.form-input{
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
 }
 
 /* form.as_p のときの p を整える */
@@ -1051,4 +1124,82 @@ label{
     color: #d93025;
     font-size: 14px;
     margin-top: 6px;
+}
+.password-note{
+    font-size: 13px;
+    color: "777";
+    margin-top : 10px;
+    line-height: 1.6;
+
+}
+.password-done-text{
+    text-align:center;
+    margin-top: 20px;
+}
+.password-done-link{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+.input[type="date"]{
+    width: 100%;
+    max-width: 280px;
+    box-sizing: border-box;
+}
+
+.picker-title{
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+.time-field,
+.page-field{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.time-field select,
+.page-field select{
+  width:80px;
+  min-width:80px;
+}
+
+.time-field span,
+.page-field span{
+  white-space:nowrap;
+}
+
+.page-wave{
+  margin:0 4px;
+}
+.form-item{
+    margin-top: 20px;
+}
+button,
+a{
+    transition: 0.2s;
+}
+
+button:hover,
+a:hover{
+    opacity: 0.85;
+}
+.login-link{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+ input[type="date"],
+ input[type="text"],
+ input[type="number"],
+ select{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.form-item input[type="date"]{
+    appearance: none;
+    -webkit-appearance: none;
+
 }

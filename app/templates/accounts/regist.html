@@ -29,6 +29,11 @@
     {{ regist_form.confirm_password.errors }}
 </p>
 <input type="submit" value="登録">
-</form>    
+</form>
 </div>
+
+<p class="login-link">
+  すでにアカウントをお持ちの方は
+  <a href="{% url 'accounts:login' %}">こちら</a>
+</p>
 {% endblock %}

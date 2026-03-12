@@ -25,18 +25,33 @@
     </div>
     <div class="form-item">
     <label>生年月日</label>
-    <input type="date" name="birthday" value="{{ profile.birthday|date:'Y-m-d' }}">
+    <input type="date" name="birthday"
+           class="birthday-input"
+           value="{{ profile.birthday|date:'Y-m-d' }}">
     </div>
     <div class="form-item">
     <label>【達成目標】(２０文字以内)</label>
 　　<div class="form-hint">
-    <p>あなたが最終的に最終的に叶えたい目標を書いてください。<br>
-
+    <p>あなたが最終的に叶えたい目標を書いてください。<br>
     </p>
-
-    <textarea name="goal">{{ profile.goal }}</textarea>
     </div>
+    <textarea id="goalInput" name="goal" maxlength="20">{{ profile.goal }}</textarea>
 
     <button type="submit" class="btn-submit">登録</button>
 </form>
+
+<script>
+const goalInput = document.getElementById("goalInput");
+const goalError = document.getElementById("goalError");
+
+goalInput.addEventListener("input", function(){
+
+  if(goalInput.value.length > 20){
+    goalError.style.display = "block";
+  }else{
+    goalError.style.display = "none";
+  }
+
+});
+</script>
 {% endblock %}
