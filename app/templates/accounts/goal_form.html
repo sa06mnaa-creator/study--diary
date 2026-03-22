@@ -9,10 +9,16 @@
     <div class="form-item date-item">
     <label>達成目標日 *</label>
     {{ form.date }}
-    {% if goals_count == 0 %}
+
+    {% if form.date.errors %}
+      <p class="error-message" style="color:#cc0000; font-weight:normal;">{{ form.date.errors.0 }}</p>
+    {% endif %}
+    {% if day_goals_count == 0 %}
     <span class="form-hint">
         達成を目指す日付を選び、達成したらスタンプを記録しましょう。
+        「*」は必須項目です。
     </span>
+
     {% endif %}
     </div>
     <div class="form-item">

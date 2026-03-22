@@ -6,16 +6,12 @@
      margin: 0;
      font-family: sans-serif;
 }
-.body{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+
 .app-header{
      background-color: #f6cfd0 !important;
      height: 60px;
      display: flex; !important;
-     z-index: 2000;
+     z-index: 1000;
      align-items: center; !important;
      justify-content: space-between !important;
      padding: 0 16px;
@@ -64,20 +60,34 @@
 .app-footer{
      background-color: #f6cfd0;
      height: 72px;
-     position: static;
-     bottom: auto;
-     left: auto;
-     right: auto;
-     z-index: 9999;
+     position: fixed;
+     bottom: 0;
+     left: 0;
+     right: 0;
+
+     z-index: 1000;
+     padding-top: 80px;
      width: 100%;
      display: flex;
      border-top: 1px solid #ddd;
+     min-height: 72px;
+     padding: 8px 0;
+     box-sizing: border-box;
      justify-content: space-around;
 
-.main, .content, .main-content{
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
-}
 
+.main, .content, .main-content{
+    padding-bottom: 72px;
+}
+main{
+    min-height: calc(100vh-169px);
+    flex: 1;
+}
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 }
 .app-footer a{
      text-decoration: none;
@@ -728,27 +738,8 @@
 .btn-not{
   padding: 10px 0;
   border-radius: 8px;
-  border: 2px solid #333;
-  font-weight: bold;
+  border: none;
   cursor: pointer;
-}
-.btn-achieved{
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 0;
-  border-radius: 8px;
-  border: 2px solid #333;
-  font-weight: bold;
-  cursor: pointer;
-  background: #5b6df6;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-decoration: none;
-}
-.btn-not{
   width: 100%;
   box-sizing: border-box;
   background: #ddd;
@@ -844,18 +835,6 @@
 .color-choice input:checked + .color-dot{
   outline: 3px solid #5b6df6;
 }
-.stamp-submit{
-  width: 100%;
-  max-width: 260px;
-  margin-top: 10px;
-  padding: 12px 0;
-  border-radius: 8px;
-  border: 2px solid #333;
-  background: #3b73cf;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-}
 .color-dot.red { background-color: red; }
 .color-dot.pink { background-color: pink; }
 .color-dot.orange{ background-color: orange; }
@@ -875,7 +854,7 @@
 .calendar-stamp.pink{ color: pink; }
 .calendar-stamp.orange{ color: orange; }
 .calendar-stamp.yellow{ color: #d4b200; }
-.calendar-stamp.lightgreen{ color: #a8e063; }
+.calendar-stamp.lightgreen{ color: lightgreen; }
 .calendar-stamp.green{ color: green; }
 .calendar-stamp.lightblue{ color: skyblue; }
 .calendar-stamp.blue{ color: #3b73cf; }
@@ -891,6 +870,7 @@
 .stamp.pink{ color: pink; }
 .stamp.orange{ color: orange; }
 .stamp.yellow{ color: #d4b200; }
+.stamp.lightgreen{ color: lightgreen; }
 .stamp.green{ color: green; }
 .stamp.lightblue{ color: skyblue; }
 .stamp.blue{ color: #3b73cf; }
@@ -992,10 +972,12 @@ form{
 
 .form-item input,
 .form-item select,
-.form-item textarea{
+.form-item textarea
+.form-item select{
   width: 100%;
-  max-width: 100%;
+  max-width: 320px;
   box-sizing: border-box;
+  margin-bottom: 20px;
   display: block;
   font-size: 16px;   /* iPhoneの勝手ズーム防止 */
   padding: 12px 12px;
@@ -1004,7 +986,7 @@ form{
 }
 .form-input[type="date"]{
     width: 100% !important;
-    max-width: 280px !important;
+    max-width: 320px !important;
     box-sizing: border-box;
     display: block;
 }
@@ -1077,9 +1059,10 @@ label{
 }
 }
 .error-message{
-    color: #cc0000;
+    color: #cc0000 !important;
     font-weight: bold;
     margin-bottom: 16px;
+    display: block;
 }
 .selected-date{
     margin: 0 auto;
@@ -1115,6 +1098,11 @@ label{
     margin-top: 6px;
     line-height: 1.5;
     opacity: 0.8;
+    text-align: center;
+}
+.form-hint p{
+    text-align: center;
+    margin: 0;
 }
 .calendar-page{
     padding-top: 60px;
@@ -1202,4 +1190,63 @@ a:hover{
     appearance: none;
     -webkit-appearance: none;
 
+}
+.error-message{
+    color: #cc0000;
+    font-weight: bold;
+    margin-bottom: 16px;
+    display: block;
+}
+a.btn-achieved-clean{
+  display: block !important;
+  width: 100%;
+
+  background: #5b6df6 !important;
+  color: #ffffff !important;
+
+  text-decoration: none !important;   /* ←これ超重要 */
+  border: none !important;
+
+  padding: 14px 0;
+  border-radius: 10px;
+
+  text-align: center;
+  font-weight: normal !important;
+
+  box-sizing: border-box;
+}
+.auth-form{
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.form-item{
+  margin-bottom: 20px;
+}
+
+.form-item label{
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form textarea{
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-form input[type="date"]{
+  width: 100%;
+}
+
+.auth-error{
+  color: #cc0000;
+  font-size: 14px;
+  margin-top: 6px;
+}
+.form-item2{
+    width: 100%;
+    overflow: hidden;
 }

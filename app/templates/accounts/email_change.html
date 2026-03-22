@@ -6,6 +6,9 @@
     {% csrf_token %}
 
 <div class="email-change-box">
+    {% if error_message %}
+        <p class="error-message">{{ error_message }}</p>
+    {% endif %}
     <div class="form-item">
         <label>現在のメールアドレス</label>
         <input type="email" value="{{ request.user.email }}" disabled>

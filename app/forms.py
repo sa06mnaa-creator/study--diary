@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import PasswordChangeForm
 from .models import Profile
 from .models import Goal
+from datetime import date
 
 User = get_user_model()
 
@@ -43,7 +44,8 @@ class RegistForm(forms.ModelForm):
                 try:
                     validate_password(password, self.instance)
                 except ValidationError as e:
-                  self.add_error('password', e)
+                   for error in e:
+                       self.add_error('password', error)
             return cleaned_data
     def save(self, commit=True):
             user = super().save(commit=False)
@@ -139,6 +141,15 @@ class GoalForm(forms.ModelForm):
                                            'class': 'form-input',})
         }
 
+
+
+    def clean_date(self):
+        goal_date = self.cleaned_data.get("date")
+        if goal_date and goal_date > date.today():
+            raise forms.ValidationError("未来の日付は選べません。今日までの日付を選んでください。")
+
+        return goal_date
+
     def clean(self):
         cleaned = super().clean()
 
@@ -150,6 +161,6 @@ class GoalForm(forms.ModelForm):
             return cleaned
 
         if e < s:
-            self.add_error("page_end", "終了ページは開始ページ以上にしてね。")
+            self.add_error("page_end", "終了ページは開始ページ以上にしてください。")
 
         return cleaned

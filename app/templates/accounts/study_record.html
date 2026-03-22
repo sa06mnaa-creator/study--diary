@@ -11,7 +11,7 @@
     </p>
 
     <!-- 日付はGETで保持してページをリロード -->
-    <form method="get" class="record-date">
+    <form method="get" class="form-item">
       <input type="date"
              name="date"
              value="{{ selected_date|date:'Y-m-d' }}"
@@ -32,11 +32,33 @@
     <div class="record-actions">
       <!-- ★選択した日付をクエリで stamp_select に渡す -->
       <a href="{% url 'accounts:stamp_select' goal.id %}?date={{ selected_date|date:'Y-m-d' }}"
-         class="btn-achieved">達成！</a>
+         class="btn-achieved-clean"
+         style="
+         display: block;
+         width: 100%;
+         background: #5b6df6;
+         color: white;
+         text-decoration: none;
+         border: none;
+         padding: 14px 0;
+         border-radius: 10px;
+         text-align: center;
+         font-weight: normal;">達成！</a>
 
       <form action="{% url 'accounts:not_achieved' goal.id %}" method="post">
           {% csrf_token %}
-        <button type="submit" class="btn-not">達成ならず…</button>
+        <button type="submit"
+                class="btn-not"
+                style="
+                width: 100%;
+                background: #ddd;
+                color: #333;
+                border: none;
+                padding: 14px 0;
+                border-radius: 10px;
+                text-align: center;
+                font-weight: normal;
+                ">達成ならず…</button>
       </form>
 
     </div>

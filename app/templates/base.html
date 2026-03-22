@@ -35,7 +35,8 @@
 
     <footer class="app-footer">
         {% if user.is_authenticated %}
-        <a href="{% url 'accounts:goal_create' %}" class="footer-item">
+        {% now "Y-m-d" as today_str %}
+        <a href="{% url 'accounts:goal_create' %}?date={{ today_str }}" class="footer-item">
            <img src="{% static 'img/pennant.svg' %}" class="footer-icon">
            <span>目標</span>
         </a>

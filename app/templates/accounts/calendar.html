@@ -35,8 +35,10 @@
         　{% endfor %}
         {% endif %}
         {% if day in stamp_dict %}
-            {% with records=stamp_dict|dict_get:day %}
-                {% with record=records.0 %}
+    {% with records=stamp_dict|dict_get:day %}
+
+        {% with record=records.0 %}
+            {% if record.stamp_shape %}
                 <div class="stamp {{ record.stamp_color }}"
                      data-bs-toggle="modal"
                      data-bs-target="#modal-{{ day|date:'Ymd' }}"
@@ -48,20 +50,24 @@
                     {% if record.stamp_shape == "moon" %}☽{% endif %}
                     {% if record.stamp_shape == "cloud" %}&#x2601;&#xFE0E;{% endif %}
                 </div>
-                {% endwith %}
 
-                {% if records|length > 1 %}
-                    <small>+{{ records|length|add:"-1" }}</small>
+                {% with stamp_count=stamp_count_dict|dict_get:day %}
+                {% if stamp_count and stamp_count > 1 %}
+                    <small>+{{ stamp_count|add:"-1" }}</small>
                 {% endif %}
-            {% endwith %}
-        {% endif %}
+              {% endwith %}
+            {% endif %}
+        {% endwith %}
+
+    {% endwith %}
+{% endif %}
     </td>
     {% endfor %}
 </tr>
 {% endfor %}
 </table>
 </div>
-{% for day in stamp_dict %}
+{% for  day in stamp_dict %}
 {% with records=stamp_dict|dict_get:day %}
 <div class="modal fade" id="modal-{{ day|date:'Ymd' }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -76,6 +82,7 @@
 
       <div class="modal-body">
   {% for record in records %}
+    {% if record.stamp_shape %}
     <div class="mb-2">
       <span class="calendar-stamp {{ record.stamp_color }}">
         {% if record.stamp_shape == "circle" %}●{% endif %}
@@ -101,6 +108,7 @@
         {% endif %}
       </div>
     </div>
+    {% endif %}
   {% endfor %}
 </div>
     </div>
@@ -114,3 +122,4 @@
 </div>
 </div>
 {% endblock %}
+

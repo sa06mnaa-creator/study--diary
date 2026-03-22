@@ -12,15 +12,15 @@ from django.contrib.auth import authenticate, login, logout
 from datetime import date
 from collections import defaultdict
 import calendar as pycalendar
-from .models import Profile, Goal, StudyRecord
+from .models import Profile, Goal, StudyRecord, CustomUser
 from .forms import ProfileForm
 from .forms import GoalForm
-from .models import Goal
 from django.db.models import Exists, OuterRef
 from django.conf import settings
 from .forms import ProfileIconForm
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
+
 
 @login_required
 def home(request):
@@ -128,12 +128,27 @@ def user_edit(request):
 
 def email_change(request):
     if request.method == "POST":
-        new_email = request.POST.get("email")
+        new_email = request.POST.get("email", "").strip().lower()
+        current_email = (request.user.email or "").strip().lower()
+
+        if not new_email:
+            return render(request, "accounts/email_change.html", {
+                "error_message": "メールアドレスを入力してください。",
+                "entered_email": new_email,
+            })
+
+        if new_email == current_email:
+            return render(request, "accounts/email_change.html", {
+                "error_message": "現在と同じメールアドレスです。",
+                "entered_email": new_email,
+            })
+
         request.user.email = new_email
         request.user.save()
 
-        return redirect('accounts:mypage')
-    return render(request, 'accounts/email_change.html')
+        return redirect("accounts:mypage")
+
+    return render(request, "accounts/email_change.html")
 
 @login_required
 
@@ -288,6 +303,16 @@ def calendar_view(request, year, month):
     for r in records:
         stamp_dict[r.date].append(r)
 
+    for day, recs in stamp_dict.items():
+        stamped = [r for r in recs if r.stamp_shape]
+        not_stamped = [r for r in recs if not r.stamp_shape]
+        stamp_dict[day] =stamped + not_stamped
+
+    stamp_count_dict ={}
+    for day, recs in stamp_dict.items():
+        stamped_count = len([r for r in recs if r.stamp_shape])
+        stamp_count_dict[day] = stamped_count
+
     prev_month = month -1
     prev_year = year
     if prev_month == 0:
@@ -308,11 +333,13 @@ def calendar_view(request, year, month):
             "month": month,
             "month_days": month_days,
             "stamp_dict": dict(stamp_dict),
+            "stamp_count_dict": stamp_count_dict,
             "prev_year": prev_year,
             "prev_month": prev_month,
             "next_year": next_year,
             "next_month": next_month,
             "today": today,
+
 
 
     })
@@ -335,32 +362,6 @@ def not_achieved(request):
        "month": month, })
 
 @login_required
-def goal_create(request):
-    q = request.GET.get("date")
-    initial_date = parse_date(q) if q else None
-
-    if request.method == "POST":
-        form = GoalForm(request.POST)
-        if form.is_valid():
-            goal_date = form.cleaned_data["date"]
-
-            same_day_count = Goal.objects.filter(user=request.user, date=goal_date).count()
-            if same_day_count >= 6:
-                messages.error(request, "目標は同じ日に6個までです。")
-                return redirect("accounts:home")
-
-            goal = form.save(commit=False)
-            goal.user = request.user
-            goal.save()
-            return redirect("accounts:home")
-    else:
-        form = GoalForm(initial={"date": initial_date} if initial_date else None)
-
-    goals_count = Goal.objects.filter(user=request.user).count()
-    return render(request, "accounts/goal_form.html", {
-        "form": form,
-        "goals_count": goals_count,
-        })
 
 def record_create(request, goal_id):
     return render(request, 'accounts/record_form.html',{
@@ -386,6 +387,48 @@ def record_top(request):
         {"goals": goals}
     )
 
+@login_required
+def goal_create(request):
+    q = request.GET.get("date")
+    initial_date = parse_date(q) if q else None
+
+    if request.method == "POST":
+        form = GoalForm(request.POST)
+
+        if form.is_valid():
+            goal_date = form.cleaned_data["date"]
+
+            same_day_count = Goal.objects.filter(
+                user=request.user,
+                date=goal_date
+            ).count()
+
+            if same_day_count >= 6:
+                messages.error(request, "目標は同じ日に6個までです。")
+                return redirect(f"/accounts/goal/add/?date={goal_date.strftime('%Y-%m-%d')}")
+
+            goal = form.save(commit=False)
+            goal.user = request.user
+            goal.save()
+            return redirect("accounts:home")
+    else:
+        form = GoalForm(initial={"date": initial_date} if initial_date else None)
+
+    day_goals_count = Goal.objects.filter(
+        user=request.user,
+        date=initial_date
+    ).count() if initial_date else 0
+
+    return render(request, "accounts/goal_form.html", {
+        "form": form,
+        "day_goals_count": day_goals_count,
+        "initial_date": initial_date,
+    })
+
+    return render(request, "accounts/goal_form.html", {
+        "form": form,
+        "day_goals_count": day_goals_count,
+    })
 @login_required
 def not_achieved(request, goal_id):
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
