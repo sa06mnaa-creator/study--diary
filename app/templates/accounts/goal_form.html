@@ -3,7 +3,14 @@
 {% block content %}
 <div class="goal-container">
 <h2>目標設定</h2>
-<form method="post">
+<form method="post" onsubmit="disableSubmitButton(this)">
+    {% if form.non_field_errors %}
+    <div class=error-message>
+        {% for error in form.non_field_errors %}
+          {{ error }}<br>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% csrf_token %}
 
     <div class="form-item date-item">
@@ -44,6 +51,14 @@
             {{ form.page_end }}
             <span>ページ</span>
         </div>
+
+        {% if form.page_end.errors %}
+        <div class="error-message">
+            {% for error in form.page_end.errors %}
+              {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <button type="submit" class="btn-primary">保存</button>

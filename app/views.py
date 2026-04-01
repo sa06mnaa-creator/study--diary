@@ -37,10 +37,13 @@ def home(request):
 
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
+    has_goals = Goal.objects.filter(user=request.user).exists()
+
     return render(request, "accounts/home.html",{
         "profile": profile,
         "goals": goals,
         "selected_date": selected_date,
+        "has_goals": has_goals,
     })
 
 def regist(request):
@@ -76,6 +79,8 @@ def activate_user(request, token):
         }
     )
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:home')
     login_form = LoginForm(request.POST or None)
     if login_form.is_valid():
         email = login_form.cleaned_data['email']
@@ -207,7 +212,8 @@ def study_record(request, goal_id):
         selected_date = timezone.localdate()
 
     if selected_date > today:
-        selected_date = today
+       messages.error(request, "未来の日付では記録できません。")
+       return redirect("accounts:study_record",goal_id=goal.id)
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -232,10 +238,16 @@ def stamp_select(request, goal_id):
         user=request.user,
     )
 
+    today = timezone.localdate()
+
     q = request.GET.get("date")
     target_date = parse_date(q) if q else None
     if target_date is None:
-        target_date = date.today()
+        target_date = today()
+
+    if target_date > today:
+        messages.error(request, "未来の日付ではスタンプを記録できません。")
+        return redirect("accounts:stamp_select",goal_id=goal.id)
 
     if request.method == "POST":
 
@@ -247,7 +259,7 @@ def stamp_select(request, goal_id):
 
         if target_date_post is None:
             messages.error(request, "日付が不正です。")
-            return redirect("accounts:caledar_view", year=date.today().year, month=date.today().month)
+            return redirect("accounts:calendar_view", year=date.today().year, month=date.today().month)
 
         if not (shape and color):
             messages.error(request, "スタンプを選んでください。")
@@ -407,10 +419,26 @@ def goal_create(request):
                 messages.error(request, "目標は同じ日に6個までです。")
                 return redirect(f"/accounts/goal/add/?date={goal_date.strftime('%Y-%m-%d')}")
 
-            goal = form.save(commit=False)
-            goal.user = request.user
-            goal.save()
-            return redirect("accounts:home")
+            subject = form.cleaned_data["subject"]
+            study_hour = form.cleaned_data["study_hour"]
+            study_minute = form.cleaned_data["study_minute"]
+            page_start = form.cleaned_data["page_start"]
+            page_end = form.cleaned_data["page_end"]
+
+            if Goal.objects.filter(
+                user=request.user,
+                date=goal_date,
+                subject=subject,
+                study_hour=study_hour,
+                study_minute=study_minute,
+                page_start=page_start,
+                page_end=page_end,).exists():
+                    form.add_error(None, "同じ目標はすでに登録されています。")
+            else:
+                goal = form.save(commit=False)
+                goal.user = request.user
+                goal.save()
+                return redirect("accounts:home")
     else:
         form = GoalForm(initial={"date": initial_date} if initial_date else None)
 
@@ -425,21 +453,27 @@ def goal_create(request):
         "initial_date": initial_date,
     })
 
-    return render(request, "accounts/goal_form.html", {
-        "form": form,
-        "day_goals_count": day_goals_count,
-    })
+
 @login_required
 def not_achieved(request, goal_id):
     goal = get_object_or_404(Goal, id=goal_id, user=request.user)
 
+    today = timezone.localdate()
+
     if request.method == "POST":
+        q = request.POST.get("date")
+        target_date = parse_date(q) if q else goal.date
+
+        if target_date and target_date > today:
+            messages.error(request, "未来の日付では記録できません。")
+            return redirect("accounts:study_record",goal_id=goal.id)
+
         StudyRecord.objects.update_or_create(
             user=request.user,
             goal=goal,
             defaults={
                 "subject": goal.subject,
-                "date": goal.date,
+                "date": target_date,
                 "result": "not_achieved",
                 "achieved": False,
             }

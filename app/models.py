@@ -125,5 +125,20 @@ class Goal(models.Model):
     page_start = models.IntegerField(null=True, blank=True)
     page_end = models.IntegerField(null=True, blank=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "user",
+                    "date",
+                    "subject",
+                    "study_hour",
+                    "study_minute",
+                    "page_start",
+                    "page_end",
+                    ],
+                    name="unique_goal_per_user_day_content",
+            )
+        ]
     def __str__(self):
         return f"{self.user} - {self.subject}"

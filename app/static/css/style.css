@@ -10,11 +10,11 @@
 .app-header{
      background-color: #f6cfd0 !important;
      height: 60px;
-     display: flex; !important;
+     display: flex !important;
      z-index: 1000;
-     align-items: center; !important;
+     align-items: center !important;
      justify-content: space-between !important;
-     padding: 0 16px;
+     padding: env(safe-area-inset-top) 16px 0 16px;
      position: fixed;
      width: 100%;
      top:0;
@@ -56,6 +56,8 @@
 .content{
      padding: 20px;
      padding-bottom: 80px;
+     padding-top: calc(60px + env(safe-area-inset-top));
+
 }
 .app-footer{
      background-color: #f6cfd0;
@@ -564,10 +566,13 @@ body{
      text-align: center;
 }
 .content{
-     padding-top: 60px;
+     padding-top: 0 !important;
      padding-bottom: 60px;
      margin-top: 0;
      flex: 1;
+}
+.auth-page{
+    margin-top: 0;
 }
 .login-wrapper{
      min-height: calc(100vh - 120px);
@@ -591,7 +596,7 @@ body{
 .auth-form-wrapper{
      display: flex;
      justify-content: center;
-     margin-top: 40px;
+     margin-top: 0;
 }
 .auth-form{
      width: 100%;
@@ -883,6 +888,18 @@ body{
     font-size: 14px;
     margin-top: 10px;
 }
+.btn-home{
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 20px auto 0;
+  padding: 14px 0;
+  text-align: center;
+  background-color: #5b6df6;
+  color: #fff;
+  border-radius: 10px;
+  text-decoration: none;
+}
 .record-top-wrapper{
      min-height: calc(100vh - 56px);
      display: flex;
@@ -941,19 +958,9 @@ body{
      margin-top: 24px;
      text-align: center;
 }
-.btn-home{
-     display: inline-block;
-     margin: 16px 0;
-     padding: 10px 20px;
-     background: #5b6df6;
-     color: white;
-     text-decoration: none;
-     border-radius: 8px;
-     font-size: 14px;
-     font-weight: 600;
-     text-align: center;
 
-}
+
+
 .calendar-actions{
      text-align: center;
      margin-top: 24px;
@@ -972,8 +979,7 @@ form{
 
 .form-item input,
 .form-item select,
-.form-item textarea
-.form-item select{
+.form-item textarea{
   width: 100%;
   max-width: 320px;
   box-sizing: border-box;
@@ -981,8 +987,15 @@ form{
   display: block;
   font-size: 16px;   /* iPhoneの勝手ズーム防止 */
   padding: 12px 12px;
-  border: 1px solid #ccc;
+  border: 2px solid: #333;
+  background: #fff !important;
   border-radius: 8px;
+}
+#goalInput{
+    border: none !important;
+    box-shadow: inset 0 0 0 3px #333 !important;
+    border-radius: 8px;
+    background: #fff !important;
 }
 .form-input[type="date"]{
     width: 100% !important;
@@ -1249,4 +1262,49 @@ a.btn-achieved-clean{
 .form-item2{
     width: 100%;
     overflow: hidden;
+}
+.form-error{
+    color: #e53935 !important;
+    font-size: 14px;
+    margin-top: 6px;
+}
+.form-item,
+button,
+.btn-primary,
+.btn-submit,
+input,
+select,
+textarea{
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+/* 入力欄 */
+.form-item input,
+.form-item select,
+.form-item textarea{
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* ボタン */
+.btn-primary,
+.btn-submit,
+button{
+  padding: 14px 0;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+/* ラベル */
+.form-item label{
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
 }

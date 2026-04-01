@@ -151,7 +151,21 @@ class GoalForm(forms.ModelForm):
         return goal_date
 
     def clean(self):
-        cleaned = super().clean()
+        cleaned_data = super().clean()
+        page_start = cleaned_data.get("page_start")
+        page_end = cleaned_data.get("page_end")
+
+        if page_start is not None and page_end is not None:
+            try:
+                page_start = int(page_start)
+                page_end = int(page_end)
+            except (TypeError, ValueError):
+                return cleaned_data
+
+            if page_start > page_end:
+                self.add_error("page_end", "終了ページは開始ページ以上にしてください。")
+
+        return cleaned_data
 
         # ChoiceFieldは文字列で来るので int に変換して、ついでに整合性チェック
         try:
