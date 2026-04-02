@@ -243,7 +243,7 @@ def stamp_select(request, goal_id):
     q = request.GET.get("date")
     target_date = parse_date(q) if q else None
     if target_date is None:
-        target_date = today()
+        target_date = today
 
     if target_date > today:
         messages.error(request, "未来の日付ではスタンプを記録できません。")
@@ -290,7 +290,7 @@ def stamp_select(request, goal_id):
 @login_required
 def calendar_view(request, year, month):
 
-    today = date.today()
+    today = timezone.localdate()
 
     month_goals = Goal.objects.filter(
         user=request.user,
@@ -460,27 +460,28 @@ def not_achieved(request, goal_id):
 
     today = timezone.localdate()
 
-    if request.method == "POST":
-        q = request.POST.get("date")
-        target_date = parse_date(q) if q else goal.date
+    q = request.GET.get("date")
+    target_date = parse_date(q) if q else goal.date
 
-        if target_date and target_date > today:
-            messages.error(request, "未来の日付では記録できません。")
-            return redirect("accounts:study_record",goal_id=goal.id)
+    if target_date and target_date > today:
+        messages.error(request, "未来の日付では記録できません。")
+        return redirect("accounts:study_record", goal_id=goal.id)
 
-        StudyRecord.objects.update_or_create(
-            user=request.user,
-            goal=goal,
-            defaults={
-                "subject": goal.subject,
-                "date": target_date,
-                "result": "not_achieved",
-                "achieved": False,
-            }
-        )
-        return redirect("accounts:record_top")
+    StudyRecord.objects.update_or_create(
+        user=request.user,
+        goal=goal,
+        defaults={
+            "subject": goal.subject,
+            "date": target_date,
+            "result": "not_achieved",
+            "achieved": False,
+        }
+    )
 
-    return render(request, "accounts/not_achieved.html", {"goal": goal})
+    return render(request, "accounts/not_achieved.html", {
+        "goal": goal,
+        "target_date": target_date,
+    })
 
 def portfolio(request):
     return render(request, 'portfolio/work-01.html')

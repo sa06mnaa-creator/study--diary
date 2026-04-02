@@ -32,7 +32,7 @@
     <div class="record-actions">
       <!-- ★選択した日付をクエリで stamp_select に渡す -->
       <a href="{% url 'accounts:stamp_select' goal.id %}?date={{ selected_date|date:'Y-m-d' }}"
-         class="btn-achieved-clean"
+         class="btn-submit"
          style="
          display: block;
          width: 100%;
@@ -46,22 +46,24 @@
          border-radius: 10px;
          text-align: center;">達成！</a>
 
-      <form action="{% url 'accounts:not_achieved' goal.id %}" method="post">
-          {% csrf_token %}
-        <button type="submit"
-                class="btn-not"
-                style="
+      <a href="{% url 'accounts:not_achieved' goal.id %}?date={{ selected_date|date:'Y-m-d' }}"
+         style="
+                display: flex;
                 width: 100%;
                 max-width: 320px;
                 margin: 20px auto 0;
                 background: #ddd;
                 color: #333;
-                border: none;
                 padding: 14px 0;
                 border-radius: 10px;
+                justify-content: center;
+                align-items: center;
                 text-align: center;
-                ">達成ならず…</button>
-      </form>
+                text-decoration: none;
+                font-size: 16px;
+                                ">
+  達成ならず…
+</a>
 
     </div>
 

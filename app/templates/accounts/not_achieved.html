@@ -5,13 +5,42 @@
 <h2>惜しい！</h2>
 <p>明日も頑張りましょう</p>
 
-<div class="action-buttons">
-    <a href="{% url 'accounts:calendar_view' year=year month=month %}" class="btn-calendar">
+<div class="action-buttons" style="width: 100%;">
+
+    <a href="{% url 'accounts:calendar_view' year=target_date.year month=target_date.month %}"
+       style="
+       display: block;
+       width: 320px;
+       margin: 16px 0 0 0;
+       padding: 14px 0;
+       border-radius: 10px;
+       text-align: center;
+       background: #5b6df6;
+       color: #fff;
+       text-decoration: none;
+       font-size: 16px;
+       box-sizing: border-box;
+       ">
         カレンダーへ
     </a>
-    <a href="{% url 'accounts:home' %}" class="btn-gray">
+
+    <a href="{% url 'accounts:home' %}"
+       style="
+       display: block;
+       width: 320px;
+       margin: 16px 0 0 0;
+       padding: 14px 0;
+       border-radius: 10px;
+       text-align: center;
+       background: #ddd;
+       color: #333;
+       text-decoration: none;
+       font-size: 16px;
+       box-sizing: border-box;
+       ">
         ホームに戻る
     </a>
+
 </div>
 </div>
 {% endblock %}
