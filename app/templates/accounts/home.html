@@ -6,7 +6,7 @@
 {% endif %}
 
 {% if not has_goals %}
-<div class="form-hint">
+<div class="form-hint" style="text-align: center;">
     <p>『目標を追加』から始めましょう。<br>
        学習時間やページ数を設定し、目標をタップして記録出来ます。<br>
     </p>
@@ -15,9 +15,18 @@
 <div class="home-container">
   <div class="goal-box same-width">
     <h3>【達成目標】</h3>
-    <p>{{ profile.goal|linebreaksbr }}</p>
-  </div>
 
+    {% if profile.goal %}
+          <p>{{ profile.goal|linebreaksbr }}</p>
+    {% else %}
+    <div class="form-hint" style="text-align: center;">
+    <p>
+        右上のアイコンをタップし、「プロフィール編集」から【達成目標】を設定しましょう。
+    </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
   <form method="get" class="date-box">
       <input
        id="datePicker"
@@ -36,7 +45,7 @@
   {% if goals %}
     <div class="goal-grid">
       {% for goal in goals %}
-        <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card">
+        <a href="{% url 'accounts:study_record' goal.id %}" class="goal-card" style="text-decoration: none; color: inherit;">
           <div class="goal-subject">{{ goal.subject }}</div>
           <ul class="goal-detail">
             {% if goal.study_hour != 0 or goal.study_minute != 0 %}

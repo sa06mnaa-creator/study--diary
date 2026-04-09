@@ -395,7 +395,7 @@ body{
 }
 .goal-grid{
      display: grid;
-     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+     grid-template-columns: 1fr 1fr;
      gap: 12px;
 
 }
@@ -403,6 +403,11 @@ body{
      border: 2px solid #999;
      padding: 10px;
      border-radius: 6px;
+     box-sizing: border-box;
+     width: 100%;
+     text-decoration: none;
+     color: #000;
+     display: block;
 }
 .goal-subject{
      background: #fff176;
@@ -439,7 +444,7 @@ body{
      justify-content: center;
      align-items: center !important;
      gap: 16px !important;
-     margin-bottom: 8px;
+     margin-top: -50px;
      position: relative;
      z-index: 10;
 }
@@ -463,15 +468,19 @@ body{
 .calendar-table th,
 .calendar-table td{
     border: 1px solid #ccc;
-    width: 45px;
-    height: 60px;
+    width: 40px;
+    height: 48px;
     vertical-align: top;
-    padding: 4px;
+    padding: 2px;
+    font-size: 12px;
 }
 
-.calenda-table th{
+.calendar-table th{
     text-align: center;
-    background: "f5f5f5";
+    background: #f5f5f5;
+    height: 28px;
+    font-size: 12px;
+    padding: 2px 0;
 }
 .other-month{
     color: #bbb;

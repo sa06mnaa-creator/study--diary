@@ -63,6 +63,13 @@
 
     <button type="submit" class="btn-primary">保存</button>
 </form>
+<script>
+function disableSubmitButton(form) {
+    const btn = form.querySelector("button[type='submit']");
+    btn.disabled = true;
+    btn.innerText = "送信中...";
+}
+</script>
 
 </div>
 {% endblock %}

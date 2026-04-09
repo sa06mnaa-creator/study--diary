@@ -37,7 +37,7 @@ def home(request):
 
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
-    has_goals = Goal.objects.filter(user=request.user).exists()
+    has_goals = Goal.objects.filter(user=request.user, date=selected_date).exists()
 
     return render(request, "accounts/home.html",{
         "profile": profile,
@@ -206,6 +206,7 @@ def study_record(request, goal_id):
 
     today = timezone.localdate()
 
+
     q = request.GET.get("date")
     selected_date = parse_date(q) if q else timezone.localdate()
     if selected_date is None:
@@ -214,6 +215,15 @@ def study_record(request, goal_id):
     if selected_date > today:
        messages.error(request, "未来の日付では記録できません。")
        return redirect("accounts:study_record",goal_id=goal.id)
+    already_recorded = StudyRecord.objects.filter(
+        user=request.user,
+        goal=goal
+    ).exists()
+
+    if already_recorded:
+        messages.error(request, "この目標はすでに記録済みです。")
+        return redirect("accounts:home")
+
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -382,6 +392,11 @@ def record_create(request, goal_id):
 
 @login_required
 def record_top(request):
+    q = request.GET.get("date")
+    selected_date = parse_date(q) if q else timezone.localdate()
+
+    if selected_date is None:
+        selected_date = timezone.localdate()
 
     recorded_goals = StudyRecord.objects.filter(
         user=request.user
@@ -396,7 +411,8 @@ def record_top(request):
     return render(
         request,
         "accounts/record_top.html",
-        {"goals": goals}
+        {"goals": goals,
+         "selected_date": selected_date,}
     )
 
 @login_required

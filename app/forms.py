@@ -142,14 +142,6 @@ class GoalForm(forms.ModelForm):
         }
 
 
-
-    def clean_date(self):
-        goal_date = self.cleaned_data.get("date")
-        if goal_date and goal_date > date.today():
-            raise forms.ValidationError("未来の日付は選べません。今日までの日付を選んでください。")
-
-        return goal_date
-
     def clean(self):
         cleaned_data = super().clean()
         page_start = cleaned_data.get("page_start")

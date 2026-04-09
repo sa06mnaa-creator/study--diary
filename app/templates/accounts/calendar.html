@@ -6,25 +6,32 @@
 <div class="calendar-page">
 <div class="calendar-container">
 
-  <div class="calendar-header">
+  <div class="calendar-header" style="margin-top: -50px!important;" >
     <a href="{% url 'accounts:calendar_view' prev_year prev_month %}" class="month-nav">&lt;</a>
     <span class="calendar-title">{{ year }}年{{ month }}月</span>
     <a href="{% url 'accounts:calendar_view' next_year next_month %}" class="month-nav">&gt;</a>
   </div>
 
-  <p class="form-hint">
-      記録したスタンプを確認できます。
+  <div class="form-hint" style="tect-align: center;">
+      <p>
+      記録したスタンプを確認できます。<br>
       過去の頑張りを振り返ってみましょう。
-  </p>
-  <table class="calendar-table">
+      </p>
+  </div>
+  <table class="calendar-table" style="border-collapse: collapse; width: 100%;">
    <tr>
-    <th>日</th><th>月</th><th>火</th><th>水</th>
-    <th>木</th><th>金</th><th>土</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">日</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">月</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">火</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">水</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">木</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">金</th>
+    <th style="width: 40px; height: 28px; font-size: 12px; padding:2px 0; text-align: center; background: #f5f5f5;">土</th>
    </tr>
 {% for week in month_days %}
 <tr>
     {% for day in week %}
-    <td class="calendar-day {% if day.month != month %}other-month{% endif %}" style="width:45px; height:60px;">
+    <td class="calendar-day {% if day.month != month %}other-month{% endif %}" style="width:40px; height:48px; font-size: 12px; padding: 2px;">
         {{ day.day }}
         {% if day in goals_dict %}
           {% for goal in goals_dict|dict_get:day %}
